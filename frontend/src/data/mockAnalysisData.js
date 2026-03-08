@@ -1,0 +1,48 @@
+export const mockAnalysis = {
+  riskScore: 10,
+  riskLevel: "CRITICAL",
+  duration: "1m 34s",
+  language: "English",
+  findingsCount: 5,
+  confidence: 92,
+  sessionId: "45978X",
+  context: "VTC",
+  escalationDetected: true,
+  findings: [
+    {
+      time: "1:14 – 1:17",
+      speaker: "Victim",
+      severity: "critical",
+      text: "I don’t like what you’re saying right now at all.",
+      confidence: 96,
+    },
+    {
+      time: "1:17 – 1:19",
+      speaker: "Victim",
+      severity: "critical",
+      text: "I actually feel really uncomfortable.",
+      confidence: 98,
+    },
+    {
+      time: "1:19 – 1:20",
+      speaker: "Victim",
+      severity: "critical",
+      text: "Would you mind pulling over?",
+      confidence: 97,
+    },
+    {
+      time: "1:32 – 1:34",
+      speaker: "Harasser",
+      severity: "high",
+      text: "I'm just joking around with you.",
+      confidence: 92,
+    },
+    {
+      time: "1:36 – 1:38",
+      speaker: "Bystander",
+      severity: "medium",
+      text: "Sure, honey.",
+      confidence: 91,
+    },
+  ],
+};
