@@ -3,6 +3,7 @@ import { Upload, Music, CheckCircle, X } from "lucide-react";
 import { uploadFile } from "../../api/uploadApi";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 export default function UploadArea() {
   const inputRef = useRef(null);
 
@@ -12,10 +13,29 @@ export default function UploadArea() {
   // idle | selected | ready | processing
 const navigate = useNavigate();
 const { t } = useTranslation();
-  const handleFile = (selectedFile) => {
-    setFile(selectedFile);
-    setStatus("selected");
-  };
+const MAX_SIZE = 100 * 1024 * 1024;
+const allowedTypes = [
+  "audio/mpeg",
+  "audio/wav",
+  "video/mp4",
+  "video/quicktime",
+];
+
+const handleFile = (selectedFile) => {
+
+  if (!allowedTypes.includes(selectedFile.type)) {
+    toast.error("Unsupported file format");
+    return;
+  }
+
+  if (selectedFile.size > MAX_SIZE) {
+    toast.error("File exceeds 100MB limit");
+    return;
+  }
+
+  setFile(selectedFile);
+  setStatus("selected");
+};
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -29,7 +49,8 @@ const startAnalysis = async () => {
 
     const result = await uploadFile(file, "VTC");
 
-    // 🔥 Redirect and pass result
+    toast.success("Analysis completed");
+
     navigate("/analysis", {
       state: {
         analysisData: result,
@@ -40,11 +61,12 @@ const startAnalysis = async () => {
 
   } catch (error) {
     console.error(error);
-    alert(error.message || "Upload failed");
+
+    toast.error(error.message || "Upload failed");
+
     setStatus("selected");
   }
 };
-
 
 
   const removeFile = () => {

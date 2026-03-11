@@ -1,11 +1,18 @@
 import { useRef } from "react";
+import { toast } from "sonner";
 
 export default function UploadBox({ onUpload, loading }) {
   const inputRef = useRef();
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     if (!file) return;
-    onUpload(file);
+
+    try {
+      await onUpload(file);
+      toast.success("File uploaded successfully");
+    } catch (error) {
+      toast.error(error.message || "Upload failed");
+    }
   };
 
   return (
@@ -26,8 +33,9 @@ export default function UploadBox({ onUpload, loading }) {
       <p className="font-medium text-blue-600">
         Click to upload <span className="text-gray-500">or drag and drop</span>
       </p>
+
       <p className="text-sm text-gray-400 mt-2">
-        MP3, WAV, MP4, MOV up to 50MB
+        MP3, WAV, MP4, MOV up to 100MB
       </p>
 
       {loading && (

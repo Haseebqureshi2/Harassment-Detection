@@ -1,16 +1,18 @@
-import transporter from "../config/mailer.js";
+import sgMail from "../config/sendgrid.js";
 
-export const sendEmail = async ({ to, subject, html, attachments}) => {
+export const sendEmail = async ({ to, subject, html, attachments }) => {
   try {
-    await transporter.sendMail({
-      from: `"SafeAI" <${process.env.EMAIL_USER}>`,
+    const msg = {
       to,
+      from: `"SafeAI" <${process.env.EMAIL_FROM}>`,
       subject,
       html,
-        attachments,
-    });
+      attachments
+    };
+
+    await sgMail.send(msg);
 
   } catch (error) {
-    console.error("Email Error:", error);
+    console.error("SendGrid Email Error:", error.response?.body || error);
   }
 };

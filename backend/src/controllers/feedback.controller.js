@@ -5,7 +5,10 @@ import { feedbackConfirmationTemplate } from "../utils/feedbackConfirmation.js";
 export const createFeedback = async (req, res) => {
   try {
     const payload = JSON.parse(req.body.payload);
-
+    
+if (!payload.companySize) {
+  delete payload.companySize;
+}
     const {
       firstName,
       email,
@@ -46,30 +49,31 @@ const html = feedbackConfirmationTemplate({
       },
     });
 
-    const attachments = [];
+  const attachments = [];
 
-    // ---------- JSON ----------
-    if (mode === "pdf" || mode === "json") {
-      const jsonBuffer = Buffer.from(
-        JSON.stringify(analysisData, null, 2)
-      );
+// ---------- JSON ----------
+if (mode === "pdf" || mode === "json") {
+  const jsonBuffer = Buffer.from(
+    JSON.stringify(analysisData, null, 2)
+  );
 
-      attachments.push({
-        filename: "SafeAI_Analysis_Data.json",
-        content: jsonBuffer,
-        contentType: "application/json",
-      });
-    }
+  attachments.push({
+    filename: "SafeAI_Analysis_Data.json",
+    content: jsonBuffer.toString("base64"), // ✅ SendGrid requires base64
+    type: "application/json",
+    disposition: "attachment"
+  });
+}
 
-    // ---------- PDF (FROM FRONTEND) ----------
-    if (req.file) {
-      attachments.push({
-        filename: "SafeAI_Analysis_Report.pdf",
-        content: req.file.buffer,
-        contentType: "application/pdf",
-      });
-    }
-
+// ---------- PDF ----------
+if (req.file) {
+  attachments.push({
+    filename: "SafeAI_Analysis_Report.pdf",
+    content: req.file.buffer.toString("base64"), // ✅ convert buffer
+    type: "application/pdf",
+    disposition: "attachment"
+  });
+}
     await sendEmail({
       to: email,
       subject: "Your SafeAI Analysis Report",

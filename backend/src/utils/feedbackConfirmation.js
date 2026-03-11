@@ -27,8 +27,33 @@ return `
 
 <!-- HEADER -->
 <tr>
-<td style="background:linear-gradient(90deg,#10B981,#06B6D4);padding:26px 32px;color:#ffffff;font-size:22px;font-weight:bold;">
+<td style="background:linear-gradient(to right,#10B981,#06B6D4);
+border-radius:16px 16px 0 0;padding:28px 40px;">
+
+<table cellpadding="0" cellspacing="0">
+<tr>
+
+<!-- LOGO -->
+<td style="vertical-align:middle;padding-right:12px;">
+<img
+  src="https://safeai-tech.com/logo.png"
+  alt="SafeAI"
+  width="40"
+  height="40"
+  style="display:block;border:0;outline:none;text-decoration:none;"
+/>
+</td>
+
+<!-- BRAND NAME -->
+<td style="vertical-align:middle;">
+<span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:0.02em;">
 SafeAI
+</span>
+</td>
+
+</tr>
+</table>
+
 </td>
 </tr>
 

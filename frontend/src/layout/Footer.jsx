@@ -1,29 +1,29 @@
 import { Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import logo from "../assets/logosafe.png";
+import logo from "../assets/safeai.png";
 export default function Footer() {
     const { t } = useTranslation();
     return (
         <footer className="w-full bg-gray-100 ">
-            <div className="max-w-4xl mx-auto px-6 py-12 text-center">
+            <div className="max-w-4xl mx-auto px-6 py-12 pt-0 text-center">
 
                 {/* Logo + Brand */}
                 <Link
                     to="/"
-                    className="flex items-center justify-center gap-2 mb-6 hover:opacity-80 transition-opacity"
+                    className="flex items-center justify-center gap-2 mb-1 hover:opacity-80 transition-opacity"
                 >
                     {/* Replace this with your logo image */}
                     {/* Example: <img src="/logo.png" alt="SafeAI Logo" className="w-8 h-8" /> */}
                     <img
                         src={logo}
                         alt="SafeAI Logo"
-                        className="w-12 h-12 object-contain"
+                        className="w-25 h-25 object-contain"
                     />
 
-                    <span className="text-lg font-semibold text-gray-800">
+                    {/* <span className="text-lg font-semibold text-gray-800">
                         SafeAI
-                    </span>
+                    </span> */}
                 </Link>
 
                 {/* Links */}

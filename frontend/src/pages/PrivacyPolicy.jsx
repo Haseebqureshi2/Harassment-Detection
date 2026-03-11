@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
-
+import { useTranslation } from "react-i18next";
 const sections = [
-  { id: "introduction", label: "1. Introduction" },
-  { id: "controller", label: "2. Data Controller" },
-  { id: "data-collect", label: "3. Data We Collect" },
-  { id: "legal-basis", label: "4. Legal Basis" },
-  { id: "use-data", label: "5. How We Use Your Data" },
-  { id: "retention", label: "6. Data Retention" },
-  { id: "rights", label: "7. Your Rights" },
-  { id: "sharing", label: "8. Data Sharing" },
-  { id: "security", label: "9. Data Security" },
-  { id: "transfer", label: "10. International Data Transfers" },
-  { id: "cookies", label: "11. Cookies" },
-  { id: "changes", label: "12. Changes to This Policy" },
-  { id: "contact", label: "13. Contact Us" },
+  { id: "introduction", label: "privacy_intro_title" },
+  { id: "controller", label: "privacy_controller_title" },
+  { id: "data-collect", label: "privacy_data_collect_title" },
+  { id: "legal-basis", label: "privacy_legal_basis_title" },
+  { id: "use-data", label: "privacy_use_data_title" },
+  { id: "retention", label: "privacy_retention_title" },
+  { id: "rights", label: "privacy_rights_title" },
+  { id: "sharing", label: "privacy_sharing_title" },
+  { id: "security", label: "privacy_security_title" },
+  { id: "transfer", label: "privacy_transfer_title" },
+  { id: "cookies", label: "privacy_cookies_title" },
+  { id: "changes", label: "privacy_changes_title" },
+  { id: "contact", label: "privacy_contact_title" },
 ];
 
 export default function PrivacyPolicy() {
   const [active, setActive] = useState("introduction");
-
+  const { t } = useTranslation();
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 150;
@@ -63,7 +63,7 @@ export default function PrivacyPolicy() {
           <div className="hidden md:block w-64 sticky top-28 h-fit">
             <div className="bg-[#F6F9FC] p-6">
               <h3 className="text-sm font-semibold text-gray-800 mb-4">
-                SECTIONS
+                {t("privacySections")}
               </h3>
 
               <div className="space-y-3 text-sm">
@@ -71,13 +71,12 @@ export default function PrivacyPolicy() {
                   <button
                     key={section.id}
                     onClick={() => scrollToSection(section.id)}
-                    className={`block text-left w-full transition ${
-                      active === section.id
+                    className={`block text-left w-full transition ${active === section.id
                         ? "text-[rgb(51,210,152)] font-semibold"
                         : "text-gray-500 hover:text-gray-800"
-                    }`}
+                      }`}
                   >
-                    {section.label}
+                    {t(section.label)}
                   </button>
                 ))}
               </div>
@@ -87,15 +86,15 @@ export default function PrivacyPolicy() {
           {/* MAIN CONTENT */}
           <div className="flex-1 bg-[#F6F9FC] p-10">
             <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-6">
-              LEGAL DOCUMENT
+              {t("privacyLegalDocument")}
             </h2>
 
             <h1 className="text-3xl font-bold text-black">
-              Privacy Policy
+              {t("privacyTitle")}
             </h1>
 
             <p className="text-sm text-gray-500 mt-2">
-              Last updated: February 2026
+              {t("privacyLastUpdated")}
             </p>
 
             <div className="mt-10 space-y-12 text-gray-700 text-sm leading-relaxed">
@@ -103,35 +102,30 @@ export default function PrivacyPolicy() {
               {/* 1 */}
               <section id="introduction">
                 <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  1. Introduction
+                  {t("privacy_intro_title")}
                 </h2>
                 <p>
-                  IJATECH ("IJATECH", "we", "us", or "our") is committed to
-                  protecting your privacy. This Privacy Policy explains how we
-                  collect, use, disclose, and safeguard your information when you
-                  use SafeAI, our voice harassment detection solution.
+                  {t("privacy_intro_p1")}
                 </p>
                 <p className="mt-4">
-                  We comply with the General Data Protection Regulation (GDPR)
-                  and other applicable data protection laws. By using SafeAI,
-                  you consent to the practices described in this policy.
+                  {t("privacy_intro_p2")}
                 </p>
               </section>
 
               {/* 2 */}
               <section id="controller">
                 <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  2. Data Controller
+                  {t("privacy_controller_title")}
                 </h2>
                 <div className="bg-white rounded-xl border border-gray-300 p-6">
                   <p className="font-bold text-black">IJATECH</p>
                   <p>60 rue de l'Aigle</p>
                   <p>92250 La Garenne-Colombes, France</p>
                   <p className="mt-3 text-blue-700">
-                    Email: contact@safeai-tech.com
+                    {t("privacy_email")}: contact@safeai-tech.com
                   </p>
                   <p className="mt-4">
-                    SafeAI is a voice sexual harassment detection solution developed and operated by IJATECH.
+                    {t("privacy_controller_company")}
                   </p>
                 </div>
               </section>
@@ -139,52 +133,59 @@ export default function PrivacyPolicy() {
               {/* 3 */}
               <section id="data-collect">
                 <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  3. Data We Collect
+                  {t("privacy_data_collect_title")}
                 </h2>
 
-                <h3 className="font-semibold mt-4">3.1 Audio/Video Files</h3>
+                <h3 className="font-semibold mt-4">
+                  {t("privacy_data_collect_audio_title")}
+                </h3>
+
                 <p>
-                  When you upload a file for analysis, we temporarily process the audio/video content.
+                  {t("privacy_data_collect_audio_p1")}
                   <span className="text-[rgb(51,210,152)] font-medium">
-                    {" "}Files are automatically deleted immediately after analysis is complete.
+                    {" "}{t("privacy_data_collect_audio_p2")}
                   </span>{" "}
-                  We do not store, archive, or retain any audio or video content.
+                  {t("privacy_data_collect_audio_p3")}
                 </p>
 
-                <h3 className="font-semibold mt-4">3.2 Analysis Results</h3>
-                <p>
-                  We may temporarily store analysis results (risk scores, findings, timestamps)
-                  to generate your report. These are deleted within 24 hours unless you request otherwise.
-                </p>
+                <h3 className="font-semibold mt-4">
+                  {t("privacy_data_collect_analysis_title")}
+                </h3>
 
-                <h3 className="font-semibold mt-4">3.3 Contact Information</h3>
+                <p>{t("privacy_data_collect_analysis_p")}</p>
+
+                <h3 className="font-semibold mt-4">
+                  {t("privacy_data_collect_contact_title")}
+                </h3>
+
                 <ul className="list-disc ml-6 mt-2 space-y-1">
-                  <li>First name</li>
-                  <li>Last name (optional)</li>
-                  <li>Email address</li>
-                  <li>Company name (optional)</li>
-                  <li>Role/Job title</li>
-                  <li>Industry</li>
-                  <li>Company size (optional)</li>
-                  <li>Use case description (optional)</li>
+                  <li>{t("privacy_data_collect_contact_firstname")}</li>
+                  <li>{t("privacy_data_collect_contact_lastname")}</li>
+                  <li>{t("privacy_data_collect_contact_email")}</li>
+                  <li>{t("privacy_data_collect_contact_company")}</li>
+                  <li>{t("privacy_data_collect_contact_role")}</li>
+                  <li>{t("privacy_data_collect_contact_industry")}</li>
+                  <li>{t("privacy_data_collect_contact_company_size")}</li>
+                  <li>{t("privacy_data_collect_contact_usecase")}</li>
                 </ul>
 
-                <h3 className="font-semibold mt-4">3.4 Feedback Data</h3>
-                <p>
-                  If you provide feedback, we collect your ratings and comments to improve our service.
-                </p>
+                <h3 className="font-semibold mt-4">
+                  {t("privacy_data_collect_feedback_title")}
+                </h3>
 
-                <h3 className="font-semibold mt-4">3.5 Technical Data</h3>
-                <p>
-                  We automatically collect certain technical information including IP address,
-                  browser type, device information, and usage data for security and analytics purposes.
-                </p>
+                <p>{t("privacy_data_collect_feedback_p")}</p>
+
+                <h3 className="font-semibold mt-4">
+                  {t("privacy_data_collect_technical_title")}
+                </h3>
+
+                <p>{t("privacy_data_collect_technical_p")}</p>
               </section>
 
               {/* 6 TABLE SECTION */}
               <section id="retention">
                 <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  6. Data Retention
+                 {t("privacy_retention_title")}
                 </h2>
 
                 <div className="overflow-x-auto mt-4">
@@ -192,52 +193,55 @@ export default function PrivacyPolicy() {
                     <thead className="bg-[#F6F9FC] text-blue-500">
                       <tr>
                         <th className="border border-gray-300 px-4 py-2 text-left">
-                          Data Type
+                          {t("privacy_retention_table_datatype")}
                         </th>
                         <th className="border border-gray-300 px-4 py-2 text-left">
-                          Retention Period
+                          {t("privacy_retention_table_period")}
                         </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white">
                       <tr>
                         <td className="border border-gray-300 px-4 py-2">
-                          Audio/Video files
+                          {t("privacy_retention_audio")}
                         </td>
                         <td className="border border-gray-300 px-4 py-2">
-                          Deleted immediately after analysis
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="border border-gray-300 px-4 py-2">
-                          Analysis results
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          24 hours
+                          {t("privacy_retention_audio_period")}
                         </td>
                       </tr>
                       <tr>
                         <td className="border border-gray-300 px-4 py-2">
-                          Contact information
+                          {t("privacy_retention_analysis")}
                         </td>
                         <td className="border border-gray-300 px-4 py-2">
-                          3 years or until deletion request
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="border border-gray-300 px-4 py-2">
-                          Feedback data
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          3 years (anonymized)
+                          {t("privacy_retention_analysis_period")}
+
                         </td>
                       </tr>
                       <tr>
                         <td className="border border-gray-300 px-4 py-2">
-                          Technical logs
+                          {t("privacy_retention_contact")}
+
                         </td>
                         <td className="border border-gray-300 px-4 py-2">
-                          12 months
+                                                   {t("privacy_retention_contact_period")}
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 px-4 py-2">
+                   {t("privacy_retention_feedback")}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                         {t("privacy_retention_feedback_period")}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 px-4 py-2">
+                         {t("privacy_retention_logs")}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                        {t("privacy_retention_logs_period")}
                         </td>
                       </tr>
                     </tbody>
@@ -245,143 +249,139 @@ export default function PrivacyPolicy() {
                 </div>
               </section>
 
-{/* 7 */}
-<section id="rights">
-  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    7. Your Rights (GDPR)
-  </h2>
+              {/* 7 */}
+              <section id="rights">
+                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+              {t("privacy_rights_title_full")}
+                </h2>
 
-  <p>Under GDPR, you have the following rights:</p>
+                <p>{t("privacy_rights_intro")}</p>
 
-  <ul className="list-disc ml-6 mt-3 space-y-2">
-    <li>
-      <strong>Right of Access:</strong> Request a copy of your personal data
-    </li>
-    <li>
-      <strong>Right to Rectification:</strong> Request correction of inaccurate data
-    </li>
-    <li>
-      <strong>Right to Erasure:</strong> Request deletion of your data ("right to be forgotten")
-    </li>
-    <li>
-      <strong>Right to Restrict Processing:</strong> Limit how we use your data
-    </li>
-    <li>
-      <strong>Right to Data Portability:</strong> Receive your data in a machine-readable format
-    </li>
-    <li>
-      <strong>Right to Object:</strong> Object to processing based on legitimate interests
-    </li>
-    <li>
-      <strong>Right to Withdraw Consent:</strong> Withdraw consent at any time
-    </li>
-  </ul>
+                <ul className="list-disc ml-6 mt-3 space-y-2">
+                  <li>
+                    <strong>{t("privacy_right_access")}</strong> {t("privacy_right_access_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_right_rectification")}</strong> {t("privacy_right_rectification_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_right_erasure")}</strong> {t("privacy_right_erasure_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_right_restrict")}</strong> {t("privacy_right_restrict_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_right_portability")}</strong> {t("privacy_right_portability_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_right_object")}</strong>{t("privacy_right_object_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_right_withdraw")}</strong> {t("privacy_right_withdraw_desc")}
+                  </li>
+                </ul>
 
-  <p className="mt-4">
-    To exercise these rights, contact us at{" "}
-    <span className="text-[rgb(51,210,152)]">
-      contact@safeai-tech.com
-    </span>
-  </p>
-</section>
+                <p className="mt-4">
+                {t("privacy_rights_contact")}
+                  <span className="text-[rgb(51,210,152)]">
+                    contact@safeai-tech.com
+                  </span>
+                </p>
+              </section>
 
-{/* 8 */}
-<section id="sharing">
-  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    8. Data Sharing
-  </h2>
+              {/* 8 */}
+              <section id="sharing">
+                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+                 {t("privacy_sharing_title")}
+                </h2>
 
-  <p>We may share your data with:</p>
+                <p>{t("privacy_sharing_intro")}:</p>
 
-  <ul className="list-disc ml-6 mt-3 space-y-2">
-    <li>
-      <strong>Service Providers:</strong> Cloud hosting, email delivery, analytics (all GDPR-compliant)
-    </li>
-    <li>
-      <strong>Legal Authorities:</strong> When required by law or legal process
-    </li>
-    <li>
-      <strong>Business Transfers:</strong> In connection with a merger or acquisition
-    </li>
-  </ul>
+                <ul className="list-disc ml-6 mt-3 space-y-2">
+                  <li>
+                    <strong>{t("privacy_sharing_service")}:</strong> {t("privacy_sharing_service_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_sharing_legal")}:</strong> {t("privacy_sharing_legal_desc")}
+                  </li>
+                  <li>
+                    <strong>{t("privacy_sharing_transfer")}:</strong> {t("privacy_sharing_transfer_desc")}
+                  </li>
+                </ul>
 
-  <p className="mt-4">
-    We do not sell your personal data to third parties.
-  </p>
-</section>
+                <p className="mt-4">
+                {t("privacy_sharing_note")}
+                </p>
+              </section>
 
-{/* 9 */}
-<section id="security">
-  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    9. Data Security
-  </h2>
+              {/* 9 */}
+              <section id="security">
+                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+                 {t("privacy_security_title")}
+                </h2>
 
-  <p>
-    We implement appropriate technical and organizational measures to protect your data:
-  </p>
+                <p>
+               {t("privacy_security_intro")}
+                </p>
 
-  <ul className="list-disc ml-6 mt-3 space-y-2">
-    <li>Encryption in transit (TLS 1.3) and at rest (AES-256)</li>
-    <li>Secure cloud infrastructure (EU-based servers)</li>
-    <li>Access controls and authentication</li>
-    <li>Regular security audits</li>
-    <li>Automatic file deletion after processing</li>
-  </ul>
-</section>
+                <ul className="list-disc ml-6 mt-3 space-y-2">
+                  <li>{t("privacy_security_encryption")}</li>
+                  <li>{t("privacy_security_cloud")}</li>
+                  <li>{t("privacy_security_access")}</li>
+                  <li>{t("privacy_security_audits")}</li>
+                  <li>{t("privacy_security_deletion")}</li>
+                </ul>
+              </section>
 
-{/* 10 */}
-<section id="transfer">
-  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    10. International Data Transfers
-  </h2>
+              {/* 10 */}
+              <section id="transfer">
+                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+                  {t("privacy_transfer_title")}
+                </h2>
 
-  <p>
-    Your data is processed within the European Economic Area (EEA). 
-    If we transfer data outside the EEA, we ensure appropriate safeguards 
-    are in place (Standard Contractual Clauses or adequacy decisions).
-  </p>
-</section>
+                <p>
+                 {t("privacy_transfer_text")}.
+                </p>
+              </section>
 
-{/* 11 */}
-<section id="cookies">
-  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    11. Cookies
-  </h2>
+              {/* 11 */}
+              <section id="cookies">
+                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+                 {t("privacy_transfer_title")}
+                </h2>
 
-  <p>
-    We use essential cookies for site functionality and optional analytics cookies 
-    with your consent. You can manage cookie preferences through your browser settings.
-  </p>
-</section>
+                <p>
+                {t("privacy_cookies_text")}
+                </p>
+              </section>
 
-{/* 12 */}
-<section id="changes">
-  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    12. Changes to This Policy
-  </h2>
+              {/* 12 */}
+              <section id="changes">
+                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+                 {t("privacy_changes_title")}
+                </h2>
 
-  <p>
-    We may update this policy from time to time. We will notify you of significant 
-    changes via email or a notice on our website.
-  </p>
-</section>
+                <p>
+                {t("privacy_changes_text")}
+                </p>
+              </section>
 
               {/* 13 */}
               <section id="contact">
                 <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  13. Contact Us
+               {t("privacy_contact_title")}
                 </h2>
-                <p>For any questions about this Privacy Policy or to exercise your rights:</p>
+                <p>{t("privacy_contact_intro")}:</p>
                 <div className="bg-white rounded-xl border border-gray-300 p-6">
-                <p>Email: <span className="text-[rgb(51,210,152)]">contact@safeai-tech.com</span></p>
-                <p>IJATECH</p>
-                <p>60 rue de l'Aigle</p>
-                <p>92250 La Garenne-Colombes, France</p>
-                <p className="mt-4">
-                  You also have the right to lodge a complaint with the French Data Protection Authority (CNIL):  <span className="text-blue-700">www.cnil.fr</span>
-                </p>
-               
-                
+                  <p>Email: <span className="text-[rgb(51,210,152)]">contact@safeai-tech.com</span></p>
+                  <p>IJATECH</p>
+                  <p>60 rue de l'Aigle</p>
+                  <p>92250 La Garenne-Colombes, France</p>
+                  <p className="mt-4">
+                  {t("privacy_contact_email_label")}:  <span className="text-blue-700">www.cnil.fr</span>
+                  </p>
+
+
                 </div>
               </section>
 

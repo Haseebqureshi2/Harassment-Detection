@@ -27,8 +27,9 @@ export default function FeedbackModal({
         usefulness: 0,
         recommend: 0,
     });
-const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [ratingError, setRatingError] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
@@ -137,13 +138,24 @@ const [loading, setLoading] = useState(false);
 
                 {/* ===== Form Section ===== */}
                 <form
-                  onSubmit={async (e) => {
-  e.preventDefault();
+                    onSubmit={async (e) => {
+                        e.preventDefault();
 
-  if (loading) return; // prevent double click
-  setLoading(true);
+                        if (loading) return; // prevent double click
+                        // ⭐ Require all ratings
+                        if (
+                            ratings.accuracy === 0 ||
+                            ratings.usefulness === 0 ||
+                            ratings.recommend === 0
+                        ) {
+                            setRatingError(true);
+                            return;
+                        }
 
-  try {
+                        setRatingError(false);
+                        setLoading(true);
+
+                        try {
 
                             const payload = {
                                 ...formData,
@@ -237,12 +249,12 @@ const [loading, setLoading] = useState(false);
                                 usefulness: 0,
                                 recommend: 0,
                             });
-setLoading(false);
+                            setLoading(false);
                         } catch (error) {
-  console.error("Feedback submit error:", error.message);
-  alert(error.message);
-  setLoading(false);
-}
+                            console.error("Feedback submit error:", error.message);
+                            alert(error.message);
+                            setLoading(false);
+                        }
                     }}
                     className="space-y-6"
                 >
@@ -324,10 +336,12 @@ setLoading(false);
                                 className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 h-11 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 <option value="">{t("select")}</option>
-                                <option value="transport">{t("industry_transport")}</option>
-                                <option value="healthcare">{t("industry_healthcare")}</option>
-                                <option value="education">{t("industry_education")}</option>
-                                <option value="technology">{t("industry_technology")}</option>
+                                <option value="VTC">{t("usecase_vtc")}</option>
+                                <option value="gaming">{t("usecase_gaming")}</option>
+                                <option value="corporate">{t("usecase_corporate")}</option>
+                                <option value="HR">{t("usecase_hr_legal")}</option>
+                                <option value="education">{t("usecase_education")}</option>
+                                <option value="other">{t("usecase_other")}</option>
                             </select>
                         </div>
                     </div>
@@ -403,19 +417,20 @@ setLoading(false);
 
                                 <div>
                                     <label className="font-medium">
-                                        {t("accuracyQuestion")}
+                                        {t("accuracyQuestion")} *
                                     </label>
                                     <StarRating
                                         value={ratings.accuracy}
-                                        onChange={(val) =>
-                                            setRatings((prev) => ({ ...prev, accuracy: val }))
-                                        }
+                                        onChange={(val) => {
+                                            setRatings((prev) => ({ ...prev, accuracy: val }));
+                                            setRatingError(false);
+                                        }}
                                     />
                                 </div>
 
                                 <div>
                                     <label className="font-medium">
-                                        {t("usefulnessQuestion")}
+                                        {t("usefulnessQuestion")} *
                                     </label>
                                     <StarRating
                                         value={ratings.usefulness}
@@ -427,7 +442,7 @@ setLoading(false);
 
                                 <div>
                                     <label className="font-medium">
-                                        {t("recommendQuestion")}
+                                        {t("recommendQuestion")} *
                                     </label>
                                     <StarRating
                                         value={ratings.recommend}
@@ -452,50 +467,55 @@ setLoading(false);
 
                             </div>
                         </div>
-
+       {ratingError && (
+  <p className="text-sm text-red-500 text-center">
+    Please rate all required questions.
+  </p>
+)}
                         {/* Submit Button Centered */}
                         <div className="flex justify-center pt-6">
-                       <button
-  type="submit"
-  disabled={loading}
-  className={`flex items-center gap-2 px-10 h-12 rounded-xl 
+                     
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`flex items-center gap-2 px-10 h-12 rounded-xl 
   text-white font-semibold shadow-md transition
-  ${loading 
-    ? "bg-blue-400 cursor-not-allowed" 
-    : "bg-blue-600 hover:bg-blue-700"}
+  ${loading
+                                        ? "bg-blue-400 cursor-not-allowed"
+                                        : "bg-blue-600 hover:bg-blue-700"}
 `}
->
-  {loading ? (
-    <>
-      <svg
-        className="animate-spin h-4 w-4"
-        viewBox="0 0 24 24"
-        fill="none"
-      >
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-          className="opacity-25"
-        />
-        <path
-          d="M4 12a8 8 0 018-8"
-          stroke="currentColor"
-          strokeWidth="4"
-          className="opacity-75"
-        />
-      </svg>
-      Submitting...
-    </>
-  ) : (
-    <>
-      <Send className="w-4 h-4" />
-      {getButtonText()}
-    </>
-  )}
-</button>
+                            >
+                                {loading ? (
+                                    <>
+                                        <svg
+                                            className="animate-spin h-4 w-4"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                                className="opacity-25"
+                                            />
+                                            <path
+                                                d="M4 12a8 8 0 018-8"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                                className="opacity-75"
+                                            />
+                                        </svg>
+                                        Submitting...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Send className="w-4 h-4" />
+                                        {getButtonText()}
+                                    </>
+                                )}
+                            </button>
                         </div>
 
 

@@ -1,30 +1,31 @@
 import { useEffect, useState } from "react";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
+import { useTranslation } from "react-i18next";
 
-const sections = [
-  { id: "introduction", label: "1. Introduction" },
-  { id: "company", label: "2. Company Information" },
-  { id: "service", label: "3. Service Description" },
-  { id: "prototype", label: "4. Prototype Status" },
-  { id: "obligations", label: "5. User Obligations" },
-  { id: "rights", label: "6. Content Rights & Consent" },
-  { id: "processing", label: "7. Data Processing" },
-  { id: "ip", label: "8. Intellectual Property" },
-  { id: "disclaimers", label: "9. Disclaimers" },
-  { id: "liability", label: "10. Limitation of Liability" },
-  { id: "indemnification", label: "11. Indemnification" },
-  { id: "termination", label: "12. Termination" },
-  { id: "modifications", label: "13. Modifications to Terms" },
-  { id: "law", label: "14. Governing Law" },
-  { id: "dispute", label: "15. Dispute Resolution" },
-  { id: "severability", label: "16. Severability" },
-  { id: "contact", label: "17. Contact Us" },
-];
 
 export default function TermsOfService() {
   const [active, setActive] = useState("introduction");
-
+const { t } = useTranslation();
+const sections = [
+  { id: "introduction", label: t("terms_intro_title") },
+  { id: "company", label: t("terms_company_title") },
+  { id: "service", label: t("terms_service_title") },
+  { id: "prototype", label: t("terms_prototype_title") },
+  { id: "obligations", label: t("terms_obligations_title") },
+  { id: "rights", label: t("terms_rights_title") },
+  { id: "processing", label: t("terms_processing_title") },
+  { id: "ip", label: t("terms_ip_title") },
+  { id: "disclaimers", label: t("terms_disclaimers_title") },
+  { id: "liability", label: t("terms_liability_title") },
+  { id: "indemnification", label: t("terms_indemnification_title") },
+  { id: "termination", label: t("terms_termination_title") },
+  { id: "modifications", label: t("terms_modifications_title") },
+  { id: "law", label: t("terms_law_title") },
+  { id: "dispute", label: t("terms_dispute_title") },
+  { id: "severability", label: t("terms_severability_title") },
+  { id: "contact", label: t("terms_contact_title") },
+];
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 150;
@@ -67,7 +68,7 @@ export default function TermsOfService() {
           <div className="hidden md:block w-64 sticky top-28 h-fit">
             <div className="bg-[#F6F9FC] p-6">
               <h3 className="text-sm font-semibold text-gray-800 mb-4">
-                CONTENTS
+              {t("terms_contents")}
               </h3>
 
               <div className="space-y-3 text-sm">
@@ -91,40 +92,37 @@ export default function TermsOfService() {
           {/* Main Content */}
           <div className="flex-1 bg-[#F6F9FC] p-10">
             <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-6">
-              Legal Agreement
+             {t("terms_legal_agreement")}
             </h2>
 
             <h1 className="text-3xl font-bold text-black">
-              Terms of Service
+             {t("terms_page_title")}
             </h1>
 
             <p className="text-sm text-gray-500 mt-2">
-              Last updated: February 2026
+            {t("terms_last_updated")}
             </p>
 
             <div className="mt-10 space-y-12 text-gray-700 text-sm leading-relaxed">
 
               {/* 1 */}
-              <section id="introduction">
-                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  1. Introduction
-                </h2>
-                <p>
-                  Welcome to SafeAI. These Terms of Service ("Terms") govern your
-                  access to and use of SafeAI, a voice sexual harassment detection
-                  solution ("Service") developed and operated by IJATECH.
-                </p>
-                <p className="mt-4">
-                  By accessing or using our Service, you agree to be bound by these
-                  Terms. If you disagree with any part of the Terms, you may not access the Service.
-                </p>
-              </section>
+          <section id="introduction">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t("terms_intro_title")}
+  </h2>
+
+  <p>{t("terms_intro_p1")}</p>
+
+  <p className="mt-4">
+    {t("terms_intro_p2")}
+  </p>
+</section>
 
               {/* 2 */}
-              <section id="company">
-                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  2. Company Information
-                </h2>
+            <section id="company">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t("terms_company_title")}
+  </h2>
                 <div className="bg-white rounded-xl border border-gray-300 p-6">
                   <p className="font-bold">IJATECH</p>
                   <p>60 rue de l'Aigle</p>
@@ -136,160 +134,130 @@ export default function TermsOfService() {
               </section>
 
               {/* 3 */}
-              <section id="service">
-                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  3. Service Description
-                </h2>
-                <p>
-                  SafeAI provides an AI-powered voice sexual harassment detection
-                  service that analyzes audio and video recordings.
-                </p>
+             <section id="service">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t("terms_service_title")}
+  </h2>
 
-                <ul className="list-disc ml-6 mt-4 space-y-2">
-                  <li>Audio/video file upload and analysis</li>
-                  <li>Sexual harassment detection and risk scoring</li>
-                  <li>Timestamped findings and evidence generation</li>
-                  <li>PDF and JSON report generation</li>
-                  <li>Multi-context detection (VTC, meetings, live streams, e-learning)</li>
-                </ul>
-              </section>
+  <p>{t("terms_service_p1")}</p>
+
+  <ul className="list-disc ml-6 mt-4 space-y-2">
+    <li>{t("terms_feature_upload")}</li>
+    <li>{t("terms_feature_detection")}</li>
+    <li>{t("terms_feature_timestamp")}</li>
+    <li>{t("terms_feature_reports")}</li>
+    <li>{t("terms_feature_multicontext")}</li>
+  </ul>
+</section>
 
               {/* 4 */}
-              <section id="prototype">
-                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  4. Prototype Status
-                </h2>
-<div className="bg-yellow-50 border border-red-100 rounded-xl p-6">
-  <p className="font-semibold text-yellow-700 uppercase">
-    ⚠️ Important Notice:
-  </p>
+          <section id="prototype">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t("terms_prototype_title")}
+  </h2>
 
-  <p className="mt-3 text-gray-700 leading-relaxed">
-    The current version of SafeAI is a prototype for testing and evaluation purposes.
-    Results may not be 100% accurate and should not be used as the sole basis for
-    legal, employment, or other significant decisions. We are continuously training
-    and improving our AI model based on user feedback.
-  </p>
-</div>
+  <div className="bg-yellow-50 border border-red-100 rounded-xl p-6">
+    <p className="font-semibold text-yellow-700 uppercase">
+      {t("terms_prototype_notice")}
+    </p>
 
-              </section>
-
+    <p className="mt-3 text-gray-700 leading-relaxed">
+      {t("terms_prototype_text")}
+    </p>
+  </div>
+</section>
 {/* 5 */}
 <section id="obligations">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    5. User Obligations
+    {t("terms_obligations_title")}
   </h2>
 
-  <p>By using our Service, you agree to:</p>
+  <p>{t("terms_obligations_intro")}</p>
 
   <ul className="list-disc ml-6 mt-4 space-y-2">
-    <li>Provide accurate information when requested</li>
-    <li>Use the Service only for lawful purposes</li>
-    <li>Not upload content that violates the rights of others</li>
-    <li>
-      Ensure you have the legal right to upload and analyze the audio/video content
-    </li>
-    <li>
-      Comply with all applicable laws and regulations, including data protection laws
-    </li>
-    <li>
-      Not attempt to reverse engineer, decompile, or hack the Service
-    </li>
-    <li>
-      Not use the Service to harass, abuse, or harm others
-    </li>
+    <li>{t("terms_obligation_accurate")}</li>
+    <li>{t("terms_obligation_lawful")}</li>
+    <li>{t("terms_obligation_rights")}</li>
+    <li>{t("terms_obligation_upload_right")}</li>
+    <li>{t("terms_obligation_laws")}</li>
+    <li>{t("terms_obligation_reverse")}</li>
+    <li>{t("terms_obligation_harm")}</li>
   </ul>
 </section>
 
 {/* 6 */}
+{/* 6 */}
 <section id="rights">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    6. Content Rights & Consent
+    {t("terms_rights_title")}
   </h2>
 
-  <p>You represent and warrant that:</p>
+  <p>{t("terms_rights_intro")}</p>
 
   <ul className="list-disc ml-6 mt-4 space-y-2">
-    <li>You own or have the necessary rights to the content you upload</li>
-    <li>
-      You have obtained all necessary consents from individuals whose voices
-      appear in the recordings (where legally required)
-    </li>
-    <li>
-      Your use of the Service complies with applicable privacy and wiretapping laws
-    </li>
-    <li>
-      You will not upload content containing minors without appropriate legal authorization
-    </li>
+    <li>{t("terms_rights_ownership")}</li>
+    <li>{t("terms_rights_consents")}</li>
+    <li>{t("terms_rights_laws")}</li>
+    <li>{t("terms_rights_minors")}</li>
   </ul>
 
   <p className="mt-4">
-    SafeAI does not claim ownership of your content. However, you grant us a
-    limited license to process your content solely for providing the Service.
+    {t("terms_rights_license")}
   </p>
 </section>
 
 {/* 7 */}
 <section id="processing">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    7. Data Processing
+    {t("terms_processing_title")}
   </h2>
 
-  <p>
-    We process your data in accordance with our Privacy Policy. Key points:
-  </p>
+  <p>{t("terms_processing_intro")}</p>
 
   <ul className="list-disc ml-6 mt-4 space-y-2">
-    <li>Audio/video files are deleted immediately after analysis</li>
-    <li>Analysis results are retained for a maximum of 24 hours</li>
-    <li>We do not store or archive your audio/video content</li>
-    <li>Your data is processed in the EU</li>
+    <li>{t("terms_processing_delete")}</li>
+    <li>{t("terms_processing_retention")}</li>
+    <li>{t("terms_processing_no_storage")}</li>
+    <li>{t("terms_processing_eu")}</li>
   </ul>
 </section>
 
 {/* 8 */}
 <section id="ip">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    8. Intellectual Property
+    {t("terms_ip_title")}
   </h2>
 
-  <p>
-    The Service, including its technology, algorithms, software, design, and
-    content, is owned by SafeAI and protected by intellectual property laws.
-    You may not:
-  </p>
+  <p>{t("terms_ip_intro")}</p>
 
   <ul className="list-disc ml-6 mt-4 space-y-2">
-    <li>Copy, modify, or distribute our technology</li>
-    <li>Use our trademarks without permission</li>
-    <li>Reverse engineer or attempt to extract our AI models</li>
-    <li>
-      Use automated systems to access the Service without authorization
-    </li>
+    <li>{t("terms_ip_copy")}</li>
+    <li>{t("terms_ip_trademark")}</li>
+    <li>{t("terms_ip_reverse")}</li>
+    <li>{t("terms_ip_automation")}</li>
   </ul>
 </section>
 {/* 9 */}
+{/* 9 */}
 <section id="disclaimers">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    9. Disclaimers
+    {t("terms_disclaimers_title")}
   </h2>
 
   <div className="bg-white border border-gray-300 rounded-xl p-6">
     <p className="font-semibold uppercase">
-      THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:
+      {t("terms_disclaimers_notice")}
     </p>
 
     <ul className="list-disc ml-6 mt-4 space-y-2">
-      <li>Accuracy or completeness of analysis results</li>
-      <li>Fitness for a particular purpose</li>
-      <li>Non-infringement</li>
-      <li>Uninterrupted or error-free service</li>
+      <li>{t("terms_disclaimers_accuracy")}</li>
+      <li>{t("terms_disclaimers_fitness")}</li>
+      <li>{t("terms_disclaimers_noninfringement")}</li>
+      <li>{t("terms_disclaimers_uninterrupted")}</li>
     </ul>
 
     <p className="bg-yellow-50 border border-red-100 rounded-xl p-6 text-red-400 mt-4">
-      AI analysis results should not be used as the sole basis for legal,
-      employment, disciplinary, or other significant decisions. Human review
-      and judgment are always recommended.
+      {t("terms_disclaimers_ai_warning")}
     </p>
   </div>
 </section>
@@ -297,117 +265,78 @@ export default function TermsOfService() {
 {/* 10 */}
 <section id="liability">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    10. Limitation of Liability
+    {t("terms_liability_title")}
   </h2>
 
-  <p>To the maximum extent permitted by applicable law:</p>
+  <p>{t("terms_liability_intro")}</p>
 
   <ul className="list-disc ml-6 mt-4 space-y-2">
-    <li>
-      SafeAI shall not be liable for any indirect, incidental, special,
-      consequential, or punitive damages
-    </li>
-    <li>
-      Our total liability shall not exceed the amount paid by you (if any)
-      for the Service in the 12 months prior to the claim
-    </li>
-    <li>
-      We are not liable for decisions made based on our analysis results
-    </li>
-    <li>
-      We are not liable for content uploaded by users
-    </li>
+    <li>{t("terms_liability_indirect")}</li>
+    <li>{t("terms_liability_total")}</li>
+    <li>{t("terms_liability_decisions")}</li>
+    <li>{t("terms_liability_user_content")}</li>
   </ul>
 
   <p className="mt-4">
-    These limitations do not apply where prohibited by law, including
-    liability for gross negligence or willful misconduct.
+    {t("terms_liability_exception")}
   </p>
 </section>
-
+{/* 11 */}
 {/* 11 */}
 <section id="indemnification">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    11. Indemnification
+    {t("terms_indemnification_title")}
   </h2>
 
-  <p>
-    You agree to indemnify and hold harmless SafeAI, its officers,
-    directors, employees, and agents from any claims, damages, losses,
-    or expenses arising from your use of the Service, your content,
-    or your violation of these Terms.
-  </p>
+  <p>{t("terms_indemnification_text")}</p>
 </section>
 
 {/* 12 */}
 <section id="termination">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    12. Termination
+    {t("terms_termination_title")}
   </h2>
 
-  <p>
-    We may terminate or suspend your access to the Service immediately,
-    without prior notice, for any reason, including if you breach these Terms.
-  </p>
+  <p>{t("terms_termination_intro")}</p>
 
-  <p className="mt-4">Upon termination:</p>
+  <p className="mt-4">{t("terms_termination_upon")}</p>
 
   <ul className="list-disc ml-6 mt-4 space-y-2">
-    <li>Your right to use the Service will cease immediately</li>
-    <li>Any pending analyses will be cancelled</li>
-    <li>
-      We may delete your data in accordance with our Privacy Policy
-    </li>
+    <li>{t("terms_termination_access")}</li>
+    <li>{t("terms_termination_cancel")}</li>
+    <li>{t("terms_termination_delete")}</li>
   </ul>
 </section>
 
 {/* 13 */}
 <section id="modifications">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    13. Modifications to Terms
+    {t("terms_modifications_title")}
   </h2>
 
-  <p>
-    We reserve the right to modify these Terms at any time. We will notify
-    users of significant changes via email or a notice on our website.
-    Continued use of the Service after changes constitutes acceptance
-    of the modified Terms.
-  </p>
+  <p>{t("terms_modifications_text")}</p>
 </section>
 
 {/* 14 */}
 <section id="law">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    14. Governing Law & Jurisdiction
+    {t("terms_law_title")}
   </h2>
 
-  <p>
-    These Terms are governed by the laws of France. Any disputes arising
-    from these Terms or the Service shall be subject to the exclusive
-    jurisdiction of the courts of Paris, France.
-  </p>
+  <p>{t("terms_law_text")}</p>
 
-  <p className="mt-4">
-    For EU consumers: You may also be entitled to bring claims in the
-    courts of your country of residence and benefit from mandatory
-    consumer protection laws.
-  </p>
+  <p className="mt-4">{t("terms_law_eu")}</p>
 </section>
 
 {/* 15 */}
 <section id="dispute">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    15. Dispute Resolution
+    {t.disputeTitle}
   </h2>
 
-  <p>
-    In the event of a dispute, we encourage you to contact us first at
-    contact@safeai-tech.com to seek an amicable resolution.
-  </p>
+  <p>{t.disputeText1}</p>
 
-  <p className="mt-4">
-    EU consumers may use the European Online Dispute Resolution platform:
-  </p>
+  <p className="mt-4">{t.disputeText2}</p>
 
   <a
     href="https://ec.europa.eu/consumers/odr"
@@ -422,33 +351,27 @@ export default function TermsOfService() {
 {/* 16 */}
 <section id="severability">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    16. Severability
+    {t.severabilityTitle}
   </h2>
 
-  <p>
-    If any provision of these Terms is found to be unenforceable or invalid,
-    that provision will be limited or eliminated to the minimum extent
-    necessary, and the remaining provisions will remain in full force
-    and effect.
-  </p>
+  <p>{t.severabilityText}</p>
 </section>
 
-              {/* 17 */}
-              <section id="contact">
-                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                  17. Contact Us
-                </h2>
-                <div className="bg-white rounded-xl border border-gray-300 p-6">
-                  <p>Email: contact@safeai-tech.com</p>
-                  <p>IJATECH</p>
-                  <p>60 rue de l'Aigle</p>
-                  <p>92250 La Garenne-Colombes, France</p>
-                </div>
+{/* 17 */}
+<section id="contact">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t.contactTitle}
+  </h2>
 
-                <p className="mt-6 text-gray-500">
-                  © 2026 IJATECH. All rights reserved. SafeAI is a product of IJATECH.
-                </p>
-              </section>
+  <div className="bg-white rounded-xl border border-gray-300 p-6">
+    <p>{t.email}: contact@safeai-tech.com</p>
+    <p>{t.company}</p>
+    <p>{t.address1}</p>
+    <p>{t.address2}</p>
+  </div>
+
+  <p className="mt-6 text-gray-500">{t.copyright}</p>
+</section>
 
             </div>
           </div>

@@ -10,8 +10,7 @@ function extractJson(content) {
 
   return JSON.parse(cleaned);
 }
-
-export async function analyzeHarassment(segments, context, language = "en") {
+export async function analyzeHarassment(segments, language = "en") {
   const OUTPUT_LANGUAGE =
   language === "fr"
     ? "French"
@@ -34,9 +33,11 @@ This system operates across MULTIPLE contexts:
 
 These examples are illustrative only.
 The system MUST generalize to ANY real-world or digital interaction context including social, professional, medical, entertainment, domestic, public, private, anonymous, or hybrid environments.
+No context is provided.
+You MUST infer the interaction environment from transcript evidence.
 
-Context Provided: ${context}
-If the provided context does not match one of the listed examples, infer the most appropriate risk profile using real-world reasoning.
+The interaction context represents the real-world or digital setting
+in which the conversation most likely occurs.
 
 You MUST:
 - Identify power dynamics
@@ -56,6 +57,26 @@ For ANY context:
 
 You MUST adjust severity assessment based on context.
 
+Based ONLY on the transcript, determine the most likely interaction environment.
+Examples of contexts include (NOT exhaustive):
+
+- VTC
+- CorporateOffice
+- Meeting
+- LiveStream
+- E-Learning
+- OnlineGaming
+- CallCenter
+- Telemedicine
+These are examples only.
+You MUST NOT restrict inference to this list.
+Rules:
+- Use transcript evidence only.
+- Do not guess without signals.
+- If unclear, return "Unknown".
+
+Return as:
+"detected_context": string
 ---------------------------------------
 CORE ANALYSIS PRINCIPLES
 ---------------------------------------
@@ -306,6 +327,7 @@ OUTPUT FORMAT
 Return STRICT JSON:
 
 {
+"detected_context": "string",
   "analysis": [],
   "escalation_detected": boolean,
   "pattern_description": string | null,

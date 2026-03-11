@@ -26,7 +26,8 @@ export async function handleUpload(req, res) {
       throw new Error("No file uploaded");
     }
 
-    const context = String(req.body.context || "Unknown").trim();
+    // const context = String(req.body.context || "Unknown").trim();
+    const providedContext = "Unknown";
 
     // ✅ Validate file
     validateFile(file);
@@ -53,7 +54,10 @@ export async function handleUpload(req, res) {
     const normalized = normalizeTranscript(transcription.segments);
 
     // 2️⃣ AI Analysis
-    const analysisResult = await analyzeHarassment(normalized, context);
+   const analysisResult = await analyzeHarassment(
+  normalized,
+  transcription.language
+);
 
     // ✅ Safe destructuring with guards
     const findings = Array.isArray(analysisResult?.analysis)
@@ -63,6 +67,8 @@ export async function handleUpload(req, res) {
     const distress_detected = Boolean(analysisResult?.distress_detected);
     const llmEscalation = Boolean(analysisResult?.escalation_detected);
     const context_analysis = analysisResult?.context_analysis || null;
+    const detected_context =
+  analysisResult?.detected_context || "Unknown";
     const summary = analysisResult?.summary || null;
     const recommended_action = analysisResult?.recommended_action || null;
     const pattern_description = analysisResult?.pattern_description || null;
@@ -85,7 +91,7 @@ export async function handleUpload(req, res) {
       escalation_detected
     );
 
-    const action_hint = getActionHint(context, action_level);
+    const action_hint = getActionHint(detected_context, action_level);
 
     // 5️⃣ Build report
     const report = buildReport({
@@ -93,7 +99,7 @@ export async function handleUpload(req, res) {
       analyzed_at: analyzedAt,
       audio_duration_seconds: roundedDuration,
       language: transcription.language || "unknown",
-      context,
+       context: detected_context,
       summary,
       context_analysis,
       findings,
@@ -107,18 +113,12 @@ export async function handleUpload(req, res) {
     });
 
     // ✅ Structured log (no transcript logging)
-    console.log("Analysis completed", {
-      sessionId,
-      context,
-      riskScore,
-      action_level,
-      escalation_detected
-    });
+   console.log(report)
 
     // 6️⃣ Persist session metadata
     await AnalysisSession.create({
       session_id: sessionId,
-      context,
+    context: detected_context,
       risk_score: riskScore,
       max_severity,
       action_level,
@@ -131,11 +131,12 @@ export async function handleUpload(req, res) {
     res.json(report);
 
   } catch (error) {
-    console.error("Analysis error:", error.message);
+  console.error("Analysis error:", error.message);
 
-    res.status(400).json({
-      error: error.message || "Analysis failed"
-    });
+  res.status(400).json({
+    success: false,
+    message: error.message || "Analysis failed"
+  });
 
   } finally {
     // ✅ Clean up uploaded file

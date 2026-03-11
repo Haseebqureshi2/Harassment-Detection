@@ -5,8 +5,11 @@ import HomePage from "./pages/HomePage";
 import AnalysisResults from "./pages/AnalysisResults";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import { Toaster } from "sonner";
 function App() {
   return (
+    <>
+    <Toaster position="top-right" richColors />
     <Router>
       <Routes>
         <Route path="/email-preview" element={<EmailTemplate />} />
@@ -17,6 +20,7 @@ function App() {
           <Route path="/terms-of-service" element={<TermsOfService/>}/>
       </Routes>
     </Router>
+    </>
   );
 }
 

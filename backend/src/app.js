@@ -4,7 +4,7 @@ import uploadRoutes from "./routes/upload.routes.js";
 import contactRoutes from "./routes/contact.routes.js"; // ✅ NEW
 import feedbackRoutes from "./routes/feedback.routes.js";
 const app = express();
-
+import path from "path";
 app.use(
   cors({
     origin: true,
@@ -12,7 +12,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use("/public", express.static("public"));
 app.use(express.json());
 
 app.use("/api/upload", uploadRoutes);
