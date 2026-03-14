@@ -11,13 +11,15 @@ import { getMaxSeverity } from "../utils/severity.js";
 import { getActionLevel } from "../utils/actionLevel.js";
 import { getActionHint } from "../utils/actionHint.js";
 import AnalysisSession from "../models/AnalysisSession.js";
+import { safeDelete } from "../utils/cleanup.js";
 import fs from "fs/promises";
 
 
 
 export async function handleUpload(req, res) {
-  let file;
-  let audioPath;
+
+  let file = req.file || null;
+  let audioPath = null;
 
   try {
     file = req.file;
@@ -70,7 +72,7 @@ export async function handleUpload(req, res) {
     const detected_context =
   analysisResult?.detected_context || "Unknown";
     const summary = analysisResult?.summary || null;
-    const recommended_action = analysisResult?.recommended_action || null;
+    // const recommended_action = analysisResult?.recommended_action || null;
     const pattern_description = analysisResult?.pattern_description || null;
 
     // 3️⃣ Backend escalation enforcement
@@ -104,7 +106,7 @@ export async function handleUpload(req, res) {
       context_analysis,
       findings,
       riskScore,
-      recommended_action,
+      // recommended_action,
       escalation_detected,
       pattern_description,
       max_severity,
@@ -128,29 +130,28 @@ export async function handleUpload(req, res) {
       language: transcription.language || "unknown"
     });
 
-    res.json(report);
+    return res.json(report);
 
   } catch (error) {
-  console.error("Analysis error:", error.message);
 
-  res.status(400).json({
-    success: false,
-    message: error.message || "Analysis failed"
-  });
+    console.error("Analysis error:", error.message);
+
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Analysis failed"
+    });
 
   } finally {
-    // ✅ Clean up uploaded file
+
+    // cleanup upload
     if (file?.path) {
-      try {
-        await fs.unlink(file.path);
-      } catch { }
+      await safeDelete(file.path);
     }
 
-    // ✅ Clean up extracted audio if different
+    // cleanup extracted audio
     if (audioPath && audioPath !== file?.path) {
-      try {
-        await fs.unlink(audioPath);
-      } catch { }
+      await safeDelete(audioPath);
     }
+
   }
 }

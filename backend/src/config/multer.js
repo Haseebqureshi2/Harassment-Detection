@@ -1,9 +1,21 @@
 import multer from "multer";
+import fs from "fs";
+import path from "path";
+
+const TEMP_UPLOAD_DIR = "src/temp/uploads";
+
+// Ensure directory exists
+if (!fs.existsSync(TEMP_UPLOAD_DIR)) {
+  fs.mkdirSync(TEMP_UPLOAD_DIR, { recursive: true });
+}
 
 const storage = multer.diskStorage({
-  destination: "temp/",
+  destination: (req, file, cb) => {
+    cb(null, TEMP_UPLOAD_DIR);
+  },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    const safeName = file.originalname.replace(/\s+/g, "_");
+    cb(null, `${Date.now()}-${safeName}`);
   },
 });
 

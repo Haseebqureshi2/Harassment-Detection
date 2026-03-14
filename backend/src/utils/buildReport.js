@@ -6,7 +6,7 @@ export function buildReport({
   context,
   findings = [],
   riskScore = 0,
-  recommended_action = null,
+  // recommended_action = null,
   context_analysis = null,
   summary = null,
   escalation_detected = false,
@@ -35,6 +35,6 @@ export function buildReport({
     escalation_detected,
     pattern_description,
     findings,
-    recommended_action
+    // recommended_action
   };
 }
