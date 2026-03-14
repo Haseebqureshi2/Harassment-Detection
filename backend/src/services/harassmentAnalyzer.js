@@ -272,18 +272,12 @@ TOP-LEVEL FIELDS REQUIRED:
 - pattern_description (string or null)
 - distress_detected (boolean)
 - context_analysis (2–3 sentences explaining risk within provided context)
-- summary (2–3 sentence executive-level risk summary)
-- recommended_action (1–2 actionable sentences aligned with severity and context)
+- summary (2–3 sentence executive-level risk summary based)
 
----------------------------------------
-RECOMMENDATION RULES
----------------------------------------
+If score = 0 and no findings exist:
 
-- Must be actionable
-- Must align with severity and context
-- No policy language
-- No repetition of summary
-- Focus on intervention, reporting, monitoring, or escalation
+The summary, context_analysis and pattern_description MUST clearly state that the conversation appears respectful and no sexual harassment or safety risk was detected.
+The tone should be positive and reassuring.
 ---------------------------------------
 NO HARASSMENT CONDITION
 ---------------------------------------
@@ -296,8 +290,7 @@ If no sexual harassment behavior, escalation, boundary violation, or victim dist
 - pattern_description = null
 - context_analysis must briefly state that no harassment indicators were detected in the provided context
 - summary must clearly state that no sexual harassment risk was identified
-- recommended_action must state that no action is required at this time
-
+- but still the context should detected.
 Do NOT fabricate minor issues.
 Do NOT over-classify neutral interactions.
 False positives must be avoided.
@@ -315,7 +308,6 @@ Rules:
   - pattern_description
   - context_analysis
   - summary
-  - recommended_action
 
 Do NOT translate category names or severity labels.
 Do NOT mix languages.
@@ -334,7 +326,6 @@ Return STRICT JSON:
   "distress_detected": boolean,
   "context_analysis": string,
   "summary": string,
-  "recommended_action": string
 }
 
 NO markdown.

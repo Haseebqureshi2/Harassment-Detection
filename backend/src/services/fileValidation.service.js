@@ -8,7 +8,7 @@ const allowedMimeTypes = [
   "video/quicktime",
 ];
 
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+const MAX_FILE_SIZE = 300 * 1024 * 1024;  // 100MB
 const MAX_DURATION = 20 * 60; // 20 minutes in seconds
 
 // ✅ Validate file type + size
@@ -22,7 +22,7 @@ export function validateFile(file) {
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error("File exceeds 100MB limit");
+    throw new Error("File exceeds 300MB limit");
   }
 
   return true;

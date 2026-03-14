@@ -154,6 +154,9 @@ const hasStaticRecommendations =
   mappedContext && contextRecommendations[mappedContext];
 
 const { t } = useTranslation();
+
+// Hide entire accordion if no recommendations
+if (!hasStaticRecommendations) return null;
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-2xl">
       <div

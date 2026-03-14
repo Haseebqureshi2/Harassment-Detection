@@ -300,7 +300,7 @@ const getButtonText = () => {
 
                     {/* Company */}
                     <div>
-                        <label className="text-sm text-gray-600">{t("company")}</label>
+                        <label className="text-sm text-gray-600">{t("companylabel")}</label>
                         <input
                             type="text"
                             name="company"
@@ -530,10 +530,17 @@ const getButtonText = () => {
                 title={t("feedbackThanksTitle")}
                 description={t("feedbackThanksDesc")}
                 buttonText={t("backToResults")}
-                onButtonClick={() => {
-                    setShowSuccess(false);
-                    navigate("/analysis");
-                }}
+              onButtonClick={() => {
+  setShowSuccess(false);
+onClose();
+  navigate("/analysis", {
+    state: {
+      analysisData,
+      fileName,
+      analyzedAt,
+    },
+  });
+}}
             />
         </div >
     );

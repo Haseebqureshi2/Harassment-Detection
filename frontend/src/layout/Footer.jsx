@@ -1,7 +1,7 @@
 import { Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import logo from "../assets/safeai.png";
+import logo from "../assets/safeailogo.png";
 export default function Footer() {
     const { t } = useTranslation();
     return (
@@ -18,9 +18,12 @@ export default function Footer() {
                     <img
                         src={logo}
                         alt="SafeAI Logo"
-                        className="w-25 h-25 object-contain"
+                        className="w-12 h-12 object-contain mb-6 mt-3"
                     />
-
+ <span className="text-xl font-bold tracking-tight mb-3">
+    <span className="text-black">Safe </span>
+    <span style={{ color: "rgb(63, 177, 181)" }}>AI</span>
+  </span>
                     {/* <span className="text-lg font-semibold text-gray-800">
                         SafeAI
                     </span> */}

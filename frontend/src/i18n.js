@@ -244,7 +244,7 @@ privacy_transfer_text:
         "Analyzes conversations in English and French with native understanding",
       uploadClick: "Click to upload",
       orDragDrop: "or drag & drop",
-      fileFormats: "MP3, WAV, MP4, MOV (up to 100 MB and 20 min max)",
+      fileFormats: "MP3, WAV, MP4, MOV (up to 300 MB and 20 min max)",
 
       agreeTerms: "I agree to the Terms of Service and Privacy Policy.",
 
@@ -286,7 +286,7 @@ privacy_transfer_text:
 
       firstNameRequired: "First name *",
       lastNameOptional: "Last name",
-      company: "Company",
+      companylabel: "Company",
       roleRequired: "Role *",
       industryRequired: "Industry *",
       companySize: "Company Size",
@@ -865,7 +865,7 @@ companySize_200_plus: "200+ employés",
         "Analyse les conversations en anglais et en français avec compréhension native",
       uploadClick: "Cliquez pour téléverser",
       orDragDrop: "ou glissez-déposez",
-      fileFormats: "MP3, WAV, MP4, MOV (jusqu’à 100 MB et 20 min max)",
+      fileFormats: "MP3, WAV, MP4, MOV (jusqu’à 300 MB et 20 min max)",
 
       agreeTerms:
         "J'accepte les Conditions d'utilisation et la Politique de confidentialité.",
@@ -907,7 +907,7 @@ companySize_200_plus: "200+ employés",
 
       firstNameRequired: "Prénom *",
       lastNameOptional: "Nom",
-      company: "Entreprise",
+      companylabel: "Entreprise",
       roleRequired: "Rôle *",
       industryRequired: "Secteur *",
       companySize: "Taille de l'entreprise",

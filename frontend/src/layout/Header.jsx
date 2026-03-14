@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ContactModal from "../components/contact/ContactModal";
-import logo from "../assets/safeai.png";
+import logo from "../assets/safeailogo.png";
 import { useTranslation } from "react-i18next"; // adjust path
 import { Link } from "react-router-dom";
 
@@ -23,16 +23,21 @@ const currentLang = i18n.language;
       <div className="max-w-7xl mx-auto px-1 py-1 flex justify-between items-center gap-1">
         
         {/* Logo Section */}
-    <Link
+  <Link
   to="/"
-  className="flex items-center gap-1 shrink-0 hover:opacity-80 transition-opacity cursor-pointer"
+  className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity cursor-pointer"
 >
   <img
     src={logo}
     alt="SafeAI Logo"
-    className="w-20 h-20 object-contain"
+    className="w-10 h-10 object-contain mb-2 mt-3"
   />
 
+  {/* Brand Text */}
+  <span className="text-xl font-bold tracking-tight m-0 p-0">
+    <span className="text-black">Safe </span>
+    <span style={{ color: "rgb(63, 177, 181)" }}>AI</span>
+  </span>
 </Link>
 
         {/* Right Section */}

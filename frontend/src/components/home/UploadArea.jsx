@@ -13,7 +13,7 @@ export default function UploadArea() {
   // idle | selected | ready | processing
 const navigate = useNavigate();
 const { t } = useTranslation();
-const MAX_SIZE = 100 * 1024 * 1024;
+const MAX_SIZE = 300 * 1024 * 1024;
 const allowedTypes = [
   "audio/mpeg",
   "audio/wav",
@@ -29,7 +29,7 @@ const handleFile = (selectedFile) => {
   }
 
   if (selectedFile.size > MAX_SIZE) {
-    toast.error("File exceeds 100MB limit");
+    toast.error("File exceeds 300MB limit");
     return;
   }
 
