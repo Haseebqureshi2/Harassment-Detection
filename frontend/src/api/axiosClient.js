@@ -4,7 +4,7 @@ const axiosClient = axios.create({
   // baseURL: "http://localhost:5000",
   baseURL: "https://harassment-detection-production.up.railway.app",
   timeout: 60000,
-  withCredentials: true, // useful later for auth cookies
+  withCredentials: true,
 });
 
 // 🔥 Optional: Global response error handler
