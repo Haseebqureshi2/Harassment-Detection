@@ -93,12 +93,11 @@ export default function FeedbackModal({
             </div>
         );
     }
-
-    const getButtonText = () => {
-        if (mode === "pdf") return "Submit Feedback & Get Report";
-        if (mode === "json") return "Submit Feedback & Get JSON";
-        return "Submit Feedback";
-    };
+const getButtonText = () => {
+  if (mode === "pdf") return t("submitFeedbackGetReport");
+  if (mode === "json") return t("submitFeedbackGetJson");
+  return t("submitFeedback");
+};
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
 
@@ -467,14 +466,14 @@ export default function FeedbackModal({
 
                             </div>
                         </div>
-       {ratingError && (
-  <p className="text-sm text-red-500 text-center">
-    Please rate all required questions.
-  </p>
-)}
+                        {ratingError && (
+                            <p className="text-sm text-red-500 text-center">
+                                Please rate all required questions.
+                            </p>
+                        )}
                         {/* Submit Button Centered */}
                         <div className="flex justify-center pt-6">
-                     
+
                             <button
                                 type="submit"
                                 disabled={loading}

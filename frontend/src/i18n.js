@@ -20,6 +20,9 @@ privacy_contact_email_label: "Email",
 
 privacy_contact_cnil_text:
 "You also have the right to lodge a complaint with the French Data Protection Authority (CNIL):",
+
+privacy_contact_copyright:
+"© 2026 IJATECH. All rights reserved. SafeAI is a product of IJATECH.",
 privacyTitle: "Privacy Policy",
 privacyLastUpdated: "Last updated: February 2026",
 privacy_data_collect_title: "3. Data We Collect",
@@ -70,6 +73,50 @@ privacy_data_collect_feedback_p:
   "If you provide feedback, we collect your ratings and comments to improve our service.",
 
 privacy_data_collect_technical_title: "3.5 Technical Data",
+privacy_legal_basis_title: "4. Legal Basis for Processing",
+
+privacy_legal_basis_intro:
+"We process your data based on:",
+
+privacy_legal_basis_consent: "Consent",
+privacy_legal_basis_consent_desc:
+"For processing audio/video files and sending marketing communications",
+
+privacy_legal_basis_contract: "Contract",
+privacy_legal_basis_contract_desc:
+"To provide our analysis service",
+
+privacy_legal_basis_interest: "Legitimate Interest",
+privacy_legal_basis_interest_desc:
+"For service improvement, security, and fraud prevention",
+
+privacy_legal_basis_obligation: "Legal Obligation",
+privacy_legal_basis_obligation_desc:
+"To comply with applicable laws",
+
+
+privacy_use_data_title: "5. How We Use Your Data",
+
+privacy_use_data_analysis:
+"To analyze audio/video content for harassment detection",
+
+privacy_use_data_reports:
+"To generate and send analysis reports",
+
+privacy_use_data_improve:
+"To improve our AI model and service quality",
+
+privacy_use_data_support:
+"To respond to your inquiries and provide support",
+
+privacy_use_data_communication:
+"To send service-related communications",
+
+privacy_use_data_fraud:
+"To detect and prevent fraud or abuse",
+
+privacy_use_data_legal:
+"To comply with legal obligations",
 privacy_data_collect_technical_p:
   "We automatically collect certain technical information including IP address, browser type, device information, and usage data for security and analytics purposes.",
 privacy_email: "Email",
@@ -264,6 +311,9 @@ privacy_transfer_text:
       feedbackThanksDesc:
         "Your feedback is invaluable and will help us improve SafeAI. We truly appreciate you taking the time to test our prototype.",
       backToResults: "Back to Results",
+        submitFeedback: "Submit Feedback",
+  submitFeedbackGetReport: "Submit Feedback & Get Report",
+  submitFeedbackGetJson: "Submit Feedback & Get JSON",
       findings: "Findings",
       detectedCount: "{{count}} detected",
       confidence: "Confidence",
@@ -294,7 +344,61 @@ privacy_transfer_text:
       context_gaming: "Gaming / Multiplayer",
       context_callcenter: "Call Center",
       context_healthcare: "Healthcare / Telemedicine",
+rec_education_critical:
+  "Notifier immédiatement l’administration scolaire, contacter les parents ou tuteurs, retirer l’élève de la session, documenter pour un examen disciplinaire, impliquer le conseiller scolaire",
 
+rec_education_high:
+  "Alerter l’enseignant ou le formateur, avertissement privé à l’élève, notifier les parents dans les 24 heures, planifier un suivi avec le conseiller scolaire",
+
+rec_education_medium:
+  "Intervention de l’enseignant pendant la session, avertissement verbal, enregistrer pour le suivi des comportements répétés, envisager de notifier les parents",
+
+rec_education_low:
+  "Note pour information de l’enseignant, surveiller les interactions futures, aucune action immédiate requise",
+  rec_gaming_critical:
+  "Bannissement permanent du compte, retrait de la session de jeu en cours, signalement à l’éditeur du jeu, conservation des preuves, notification de l’équipe de modération de la plateforme",
+
+rec_gaming_high:
+  "Bannissement temporaire (3 à 14 jours), expulsion de la session de jeu en cours, avertissement formel au compte, signalement pour suivi des récidives",
+
+rec_gaming_medium:
+  "Mise en sourdine du joueur pour la session, avertissement automatique dans le jeu, ajout à la liste de surveillance de modération",
+
+rec_gaming_low:
+  "Enregistrer l’incident, surveiller les prochaines sessions, aucune action immédiate",
+  rec_gaming_critical:
+  "Permanent account ban, remove from current session, report to game publisher, preserve evidence, notify platform moderation team",
+  rec_callcenter_critical:
+  "Agent authorized to terminate call immediately, notify supervisor in real-time, block caller number, document for legal action, offer agent psychological support",
+
+rec_callcenter_high:
+  "Supervisor alert during call, agent empowered to issue formal warning to caller, log for caller profile, consider callback restriction",
+
+rec_callcenter_medium:
+  "Supervisor notification, agent coached on de-escalation, log incident in CRM, monitor caller account",
+
+rec_callcenter_low:
+  "Log in caller profile, flag for pattern tracking, no immediate action",
+  rec_healthcare_critical:
+  "Terminate consultation immediately, notify clinic administration, block patient access pending review, document for legal or ethical board, offer practitioner support",
+
+rec_healthcare_high:
+  "Practitioner empowered to end session, formal warning to patient, flag in patient record, notify department head within 24 hours",
+
+rec_healthcare_medium:
+  "Practitioner alert with intervention guidance, log in patient file, schedule review with administration",
+
+rec_healthcare_low:
+  "Note in patient record, monitor future consultations, no immediate action",
+
+rec_gaming_high:
+  "Temporary ban (3-14 days), kick from current game session, formal warning to account, flag for repeat offense tracking",
+
+rec_gaming_medium:
+  "Mute player for session, automated in-game warning, add to moderation watchlist",
+
+rec_gaming_low:
+  "Log incident, monitor next sessions, no immediate action",
       rec_vtc_critical:
         "Contact passenger immediately, offer to end trip, temporary driver suspension, document with audio evidence",
       rec_vtc_high:
@@ -304,14 +408,28 @@ privacy_transfer_text:
       rec_vtc_low:
         "Log for analytics, no immediate action",
 
-      rec_corporate_critical:
-        "Alert HR immediately, suspend meeting access for alleged harasser, notify legal/compliance team, secure evidence for formal investigation, inform victim of their rights",
-      rec_corporate_high:
-        "HR notification within 2h, formal written warning, mandatory sensitivity training, document for personnel file, offer victim support resources",
-      rec_corporate_medium:
-        "Manager alert, verbal warning documented, schedule HR review meeting, log in compliance system",
-      rec_corporate_low:
-        "Note for HR awareness, monitor future meetings, no immediate action required",
+    rec_corporate_critical:
+  "Alert HR immediately, suspend meeting access for alleged harasser, notify legal or compliance team, secure evidence for formal investigation, inform victim of their rights",
+
+rec_corporate_high:
+  "HR notification within 2 hours, formal written warning, mandatory sensitivity training, document for personnel file, offer victim support resources",
+
+rec_corporate_medium:
+  "Manager alert, verbal warning documented, schedule HR review meeting, log in compliance system",
+
+rec_corporate_low:
+  "Note for HR awareness, monitor future meetings, no immediate action required",
+  rec_livestream_critical:
+  "Permanent ban of user, mute and remove from stream immediately, alert streamer, archive evidence for platform moderation, notify law enforcement if threats involved",
+
+rec_livestream_high:
+  "Temporary ban (7-30 days), public removal visible to other viewers, alert streamer, report to platform Trust and Safety",
+
+rec_livestream_medium:
+  "Timeout (1-24 hours), automated warning message sent, add to watchlist, streamer notification",
+
+rec_livestream_low:
+  "Log for analytics, silent watchlist add, no visible action",
       analysisDetails: "Analysis Details",
       duration: "Duration",
       language: "Language",
@@ -327,7 +445,7 @@ privacy_transfer_text:
     exportJson: "Export JSON",
     reportOnWay: "Report on its way!",
     reportDescription: "Check your inbox. Your PDF report and JSON file will arrive shortly. Thank you for testing SafeAI! Your feedback will help us build a better product.",
-    backToResults: "Back to Results",
+    
   usecase_vtc: "VTC / Ride-sharing",
 usecase_gaming: "Gaming / Streaming",
 usecase_corporate: "Corporate / Enterprise",
@@ -538,6 +656,7 @@ terms_ip_automation:
 
   FR: {
     translation: {
+      
       terms_indemnification_text:
 "Vous acceptez d’indemniser et de dégager de toute responsabilité SafeAI, ses dirigeants, administrateurs, employés et agents contre toute réclamation, dommage, perte ou dépense résultant de votre utilisation du Service, de votre contenu ou de votre violation des présentes Conditions.",
 
@@ -689,13 +808,15 @@ companySize_200_plus: "200+ employés",
       earlyPrototype: "Prototype précoce",
       resultsTitle: "Analyseergebnisse",
     analyzedAt: "Analysiert",
-    giveFeedback: "Feedback geben",
-    feedbackHint: "Hilf uns, besser zu werden – kein Download nötig",
-    downloadPdf: "Bericht herunterladen (PDF)",
-    exportJson: "JSON exportieren",
-    reportOnWay: "Bericht ist unterwegs!",
-    reportDescription: "Überprüfe deinen Posteingang. Dein PDF-Bericht und die JSON-Datei werden in Kürze eintreffen.",
-    backToResults: "Zurück zu den Ergebnissen",
+  
+  giveFeedback: "Donner un avis",
+  feedbackHint: "Aidez-nous à nous améliorer – aucun téléchargement requis",
+  downloadPdf: "Télécharger le rapport (PDF)",
+  exportJson: "Exporter JSON",
+
+  
+  reportOnWay: "Votre rapport est en route !",
+  reportDescription: "Vérifiez votre boîte de réception. Votre rapport PDF et le fichier JSON arriveront sous peu.",
 
       earlyPrototypeDesc:
         "Ce n'est pas un produit final. Les résultats peuvent ne pas être précis à 100 % car nous continuons à entraîner notre modèle. Vos commentaires sont essentiels pour nous aider à améliorer — veuillez partager vos impressions après le test.",
@@ -798,16 +919,16 @@ companySize_200_plus: "200+ employés",
 
 privacy_changes_text:
 "Nous pouvons mettre à jour cette politique de temps à autre. Nous vous informerons des changements importants par e-mail ou via un avis sur notre site web.",
-
 privacy_contact_intro:
 "Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits :",
-
 
 privacy_contact_email_label: "Email",
 
 privacy_contact_cnil_text:
-"Vous avez également le droit de déposer une plainte auprès de l’autorité française de protection des données (CNIL) :",
+"Vous avez également le droit de déposer une plainte auprès de l’autorité française de protection des données (CNIL) :", 
 
+privacy_contact_copyright:
+"© 2026 IJATECH. Tous droits réservés. SafeAI est un produit de IJATECH.",
 privacy_retention_table_datatype: "Type de données",
 privacy_retention_table_period: "Durée de conservation",
 
@@ -904,6 +1025,9 @@ privacy_transfer_text:
       feedbackThanksDesc:
         "Votre retour est précieux et nous aidera à améliorer SafeAI. Merci d’avoir pris le temps de tester notre prototype.",
       backToResults: "Retour aux résultats",
+       submitFeedback: "Envoyer un avis",
+  submitFeedbackGetReport: "Envoyer l'avis et télécharger le rapport",
+  submitFeedbackGetJson: "Envoyer l'avis et télécharger le JSON",
       findings: "Signalements",
       detectedCount: "{{count}} détecté(s)",
       confidence: "Confiance",
@@ -934,7 +1058,61 @@ privacy_transfer_text:
       context_gaming: "Jeu en ligne / Multijoueur",
       context_callcenter: "Centre d'appel",
       context_healthcare: "Santé / Télémédecine",
+rec_education_critical:
+  "Retrait immédiat de l’élève de la classe/session, alerter l’enseignant ou l’administration scolaire, notifier les parents/tuteurs si nécessaire, archiver les preuves pour examen disciplinaire",
 
+rec_education_high:
+  "Avertissement formel envoyé à l’élève, signalement à l’enseignant ou au personnel académique, ajout à la liste de surveillance comportementale",
+
+rec_education_medium:
+  "Message d’avertissement automatique envoyé à l’élève, notification de l’enseignant, surveillance en cas de répétition du comportement",
+
+rec_education_low:
+  "Enregistrer pour analyse et suivi du comportement en classe, aucune action immédiate",
+  rec_healthcare_critical:
+  "Mettre fin immédiatement à la consultation, notifier l’administration de la clinique, bloquer l’accès du patient en attente d’examen, documenter pour le comité légal ou éthique, offrir un soutien au praticien",
+
+rec_healthcare_high:
+  "Praticien autorisé à mettre fin à la session, avertissement formel au patient, signalement dans le dossier patient, notifier le responsable du service dans les 24 heures",
+
+rec_healthcare_medium:
+  "Alerte du praticien avec recommandations d’intervention, enregistrement dans le dossier patient, planifier un examen avec l’administration",
+
+rec_healthcare_low:
+  "Note dans le dossier patient, surveiller les consultations futures, aucune action immédiate",
+  rec_callcenter_critical:
+  "Agent autorisé à mettre fin immédiatement à l’appel, notifier le superviseur en temps réel, bloquer le numéro de l’appelant, documenter pour action juridique, offrir un soutien psychologique à l’agent",
+
+rec_callcenter_high:
+  "Alerte du superviseur pendant l’appel, agent autorisé à émettre un avertissement formel à l’appelant, enregistrement dans le profil de l’appelant, envisager une restriction de rappel",
+
+rec_callcenter_medium:
+  "Notification du superviseur, accompagnement de l’agent pour la désescalade, enregistrement de l’incident dans le CRM, surveillance du compte appelant",
+
+rec_callcenter_low:
+  "Enregistrer dans le profil de l’appelant, signaler pour suivi des comportements répétés, aucune action immédiate",
+  rec_livestream_critical:
+  "Bannissement permanent de l’utilisateur, mise en sourdine et retrait immédiat du stream, alerter le streamer, archiver les preuves pour la modération de la plateforme, notifier les forces de l’ordre en cas de menaces",
+
+rec_livestream_high:
+  "Bannissement temporaire (7 à 30 jours), retrait public visible par les autres spectateurs, alerter le streamer, signaler à l’équipe Trust and Safety de la plateforme",
+
+rec_livestream_medium:
+  "Timeout (1 à 24 heures), envoi automatique d’un message d’avertissement, ajout à la liste de surveillance, notification du streamer",
+
+rec_livestream_low:
+  "Enregistrer pour analyse, ajout discret à la liste de surveillance, aucune action visible",
+  rec_corporate_critical:
+  "Alerter immédiatement les ressources humaines, suspendre l’accès à la réunion pour le harceleur présumé, notifier l’équipe juridique ou conformité, sécuriser les preuves pour une enquête formelle, informer la victime de ses droits",
+
+rec_corporate_high:
+  "Notification des ressources humaines dans les 2 heures, avertissement écrit formel, formation obligatoire à la sensibilisation, documenter dans le dossier du personnel, proposer des ressources de soutien à la victime",
+
+rec_corporate_medium:
+  "Alerte au manager, avertissement verbal documenté, planifier une réunion d’examen avec les ressources humaines, enregistrer dans le système de conformité",
+
+rec_corporate_low:
+  "Note pour information des ressources humaines, surveiller les réunions futures, aucune action immédiate requise",
       rec_vtc_critical:
         "Contacter immédiatement le passager, proposer d'arrêter le trajet, suspension temporaire du chauffeur, documenter avec preuve audio",
       rec_vtc_high:
@@ -991,7 +1169,51 @@ privacy_data_collect_contact_role: "Rôle / poste",
 privacy_data_collect_contact_industry: "Secteur",
 privacy_data_collect_contact_company_size: "Taille de l’entreprise (optionnel)",
 privacy_data_collect_contact_usecase: "Description du cas d’utilisation (optionnel)",
+privacy_legal_basis_title: "4. Base légale du traitement",
 
+privacy_legal_basis_intro:
+"Nous traitons vos données sur la base de :",
+
+
+privacy_legal_basis_consent: "Consentement",
+privacy_legal_basis_consent_desc:
+"Pour le traitement des fichiers audio/vidéo et l’envoi de communications marketing",
+
+privacy_legal_basis_contract: "Contrat",
+privacy_legal_basis_contract_desc:
+"Pour fournir notre service d’analyse",
+
+privacy_legal_basis_interest: "Intérêt légitime",
+privacy_legal_basis_interest_desc:
+"Pour l’amélioration du service, la sécurité et la prévention de la fraude",
+
+privacy_legal_basis_obligation: "Obligation légale",
+privacy_legal_basis_obligation_desc:
+"Pour se conformer aux lois applicables",
+
+
+privacy_use_data_title: "5. Comment nous utilisons vos données",
+
+privacy_use_data_analysis:
+"Analyser le contenu audio/vidéo pour détecter le harcèlement",
+
+privacy_use_data_reports:
+"Générer et envoyer des rapports d’analyse",
+
+privacy_use_data_improve:
+"Améliorer notre modèle d’IA et la qualité du service",
+
+privacy_use_data_support:
+"Répondre à vos demandes et fournir une assistance",
+
+privacy_use_data_communication:
+"Envoyer des communications liées au service",
+
+privacy_use_data_fraud:
+"Détecter et prévenir la fraude ou les abus",
+
+privacy_use_data_legal:
+"Se conformer aux obligations légales",
 privacy_data_collect_feedback_title: "3.4 Données de feedback",
 privacy_data_collect_feedback_p:
   "Si vous fournissez un retour, nous collectons vos évaluations et commentaires afin d’améliorer notre service.",

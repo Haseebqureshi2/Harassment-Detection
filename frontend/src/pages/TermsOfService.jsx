@@ -331,12 +331,12 @@ const sections = [
 {/* 15 */}
 <section id="dispute">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    {t.disputeTitle}
+  {t("disputeTitle")}
   </h2>
 
-  <p>{t.disputeText1}</p>
+  <p>  {t("disputeText1")}</p>
 
-  <p className="mt-4">{t.disputeText2}</p>
+  <p className="mt-4">  {t("disputeText2")}</p>
 
   <a
     href="https://ec.europa.eu/consumers/odr"
@@ -351,26 +351,26 @@ const sections = [
 {/* 16 */}
 <section id="severability">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    {t.severabilityTitle}
+     {t("severabilityTitle")}
   </h2>
 
-  <p>{t.severabilityText}</p>
+  <p>  {t("severabilityText")}</p>
 </section>
 
 {/* 17 */}
 <section id="contact">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-    {t.contactTitle}
+   {t("contactTitle")}
   </h2>
 
   <div className="bg-white rounded-xl border border-gray-300 p-6">
-    <p>{t.email}: contact@safeai-tech.com</p>
-    <p>{t.company}</p>
-    <p>{t.address1}</p>
-    <p>{t.address2}</p>
+    <p> {t("email")}: contact@safeai-tech.com</p>
+    <p> {t("company")}</p>
+    <p> {t("address1")}</p>
+    <p> {t("address2")}</p>
   </div>
 
-  <p className="mt-6 text-gray-500">{t.copyright}</p>
+  <p className="mt-6 text-gray-500"> {t("copyright")}</p>
 </section>
 
             </div>

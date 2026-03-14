@@ -181,7 +181,53 @@ export default function PrivacyPolicy() {
 
                 <p>{t("privacy_data_collect_technical_p")}</p>
               </section>
+{/* 4 */}
+<section id="legal-basis">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t("privacy_legal_basis_title")}
+  </h2>
 
+  <p>{t("privacy_legal_basis_intro")}</p>
+
+  <ul className="list-disc ml-6 mt-3 space-y-2">
+    <li>
+      <strong>{t("privacy_legal_basis_consent")}:</strong>{" "}
+      {t("privacy_legal_basis_consent_desc")}
+    </li>
+
+    <li>
+      <strong>{t("privacy_legal_basis_contract")}:</strong>{" "}
+      {t("privacy_legal_basis_contract_desc")}
+    </li>
+
+    <li>
+      <strong>{t("privacy_legal_basis_interest")}:</strong>{" "}
+      {t("privacy_legal_basis_interest_desc")}
+    </li>
+
+    <li>
+      <strong>{t("privacy_legal_basis_obligation")}:</strong>{" "}
+      {t("privacy_legal_basis_obligation_desc")}
+    </li>
+  </ul>
+</section>
+
+{/* 5 */}
+<section id="use-data">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t("privacy_use_data_title")}
+  </h2>
+
+  <ul className="list-disc ml-6 mt-3 space-y-2">
+    <li>{t("privacy_use_data_analysis")}</li>
+    <li>{t("privacy_use_data_reports")}</li>
+    <li>{t("privacy_use_data_improve")}</li>
+    <li>{t("privacy_use_data_support")}</li>
+    <li>{t("privacy_use_data_communication")}</li>
+    <li>{t("privacy_use_data_fraud")}</li>
+    <li>{t("privacy_use_data_legal")}</li>
+  </ul>
+</section>
               {/* 6 TABLE SECTION */}
               <section id="retention">
                 <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
@@ -325,7 +371,7 @@ export default function PrivacyPolicy() {
                 </p>
 
                 <ul className="list-disc ml-6 mt-3 space-y-2">
-                  <li>{t("privacy_security_encryption")}</li>
+                  {/* <li>{t("privacy_security_encryption")}</li> */}
                   <li>{t("privacy_security_cloud")}</li>
                   <li>{t("privacy_security_access")}</li>
                   <li>{t("privacy_security_audits")}</li>
@@ -347,7 +393,7 @@ export default function PrivacyPolicy() {
               {/* 11 */}
               <section id="cookies">
                 <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-                 {t("privacy_transfer_title")}
+                 {t("privacy_cookies_title")}
                 </h2>
 
                 <p>
@@ -367,23 +413,36 @@ export default function PrivacyPolicy() {
               </section>
 
               {/* 13 */}
-              <section id="contact">
-                <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-               {t("privacy_contact_title")}
-                </h2>
-                <p>{t("privacy_contact_intro")}:</p>
-                <div className="bg-white rounded-xl border border-gray-300 p-6">
-                  <p>Email: <span className="text-[rgb(51,210,152)]">contact@safeai-tech.com</span></p>
-                  <p>IJATECH</p>
-                  <p>60 rue de l'Aigle</p>
-                  <p>92250 La Garenne-Colombes, France</p>
-                  <p className="mt-4">
-                  {t("privacy_contact_email_label")}:  <span className="text-blue-700">www.cnil.fr</span>
-                  </p>
+          <section id="contact">
+  <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
+    {t("privacy_contact_title")}
+  </h2>
 
+  <p>{t("privacy_contact_intro")}</p>
 
-                </div>
-              </section>
+  <div className="bg-white rounded-xl border border-gray-300 p-6 space-y-2">
+    <p>
+      {t("privacy_contact_email_label")}:{" "}
+      <span className="text-[rgb(51,210,152)]">
+        contact@safeai-tech.com
+      </span>
+    </p>
+
+    <p>IJATECH</p>
+    <p>60 rue de l'Aigle</p>
+    <p>92250 La Garenne-Colombes, France</p>
+
+    <p className="mt-4">
+      {t("privacy_contact_cnil_text")}
+    </p>
+
+    <p className="text-blue-700">www.cnil.fr</p>
+
+    <p className="mt-4 text-xs text-gray-500">
+      {t("privacy_contact_copyright")}
+    </p>
+  </div>
+</section>
 
             </div>
           </div>
