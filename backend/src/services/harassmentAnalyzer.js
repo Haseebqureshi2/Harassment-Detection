@@ -7,25 +7,7 @@ const openai = new OpenAI({
 /* ------------------------------------------------------- */
 /* UTIL: JSON EXTRACTION                                   */
 /* ------------------------------------------------------- */
-
-function extractJson(content) {
-  const cleaned = content
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
-
-  return JSON.parse(cleaned);
-}
-
-/* ------------------------------------------------------- */
-/* STEP 1 — DETECTION ENGINE                               */
-/* Detect context + harassment signals                     */
-/* ------------------------------------------------------- */
-
-async function detectHarassmentSignals(segments) {
-
-const prompt = `
-You are a harassment signal detection system used in safety monitoring.
+const DETECTION_SYSTEM_PROMPT = `You are a harassment signal detection system used in safety monitoring.
 
 Your role is to detect ANY potential harassment signals in a conversation transcript.
 
@@ -44,6 +26,7 @@ YOUR TASK
 
 Do NOT calculate severity.
 Do NOT summarize the conversation.
+
 ---------------------------------------
 CONTEXT DETECTION
 ---------------------------------------
@@ -308,26 +291,344 @@ Return STRICT JSON:
       "confidence": 0.0
     }
   ]
+}`;
+
+const RISK_SCORING_SYSTEM_PROMPT = `You are an enterprise harassment risk scoring engine.
+
+Your role is to evaluate previously detected behavioral signals
+and determine the harassment risk level of the interaction.
+
+Input contains:
+- detected_context
+- detected behavioral signals
+
+You must analyze the behavioral progression and assign severity.
+
+Your analysis must be STRICTLY based on the provided signals.
+Do NOT invent new events.
+
+------------------------------------------------
+EVIDENCE-BASED ANALYSIS RULE
+------------------------------------------------
+
+Every severity judgment and explanation must reference:
+
+• the signal category
+• the conversation behavior
+• the interaction context
+
+If evidence is weak, severity should remain low or medium.
+
+Do NOT exaggerate risk.
+
+------------------------------------------------
+HARASSMENT CATEGORIES
+------------------------------------------------
+
+Allowed categories:
+
+compliment
+solicitation
+objectification
+sexual_explicit
+coercion
+intimidation
+boundary_violation
+victim_distress
+refusal_ignored
+threat
+
+Category definitions:
+
+compliment
+Non-sexual positive remark.
+Low severity unless persistent or escalating.
+
+solicitation
+Request for romantic or sexual engagement
+or request for personal contact.
+
+objectification
+Reducing a person to physical attributes
+in a sexualized manner.
+
+sexual_explicit
+Direct sexual language or explicit sexual propositions.
+
+coercion
+Pressuring someone after hesitation or refusal.
+
+intimidation
+Implied consequences, authority misuse,
+or aggressive tone meant to pressure someone.
+
+boundary_violation
+Continuing familiar or sexualized language
+after the other person expresses discomfort.
+
+victim_distress
+Statements showing discomfort, refusal,
+fear, confusion, or attempts to disengage.
+
+refusal_ignored
+The harasser continues inappropriate behavior
+after a refusal or distress signal.
+
+threat
+Explicit or implied harm, retaliation,
+or statements creating an unsafe environment.
+
+------------------------------------------------
+ESCALATION LOGIC
+------------------------------------------------
+
+Escalation is detected when behavioral patterns evolve over time.
+
+Typical escalation patterns include:
+
+• solicitation → refusal → persistence
+• distress → continued inappropriate conduct
+• repeated boundary violations
+• increasing sexual explicitness
+• intimidation following rejection
+
+If escalation exists:
+
+- escalation_detected = true
+- pattern_description must describe the behavioral progression clearly.
+
+Example structure:
+
+"Initial solicitation was followed by victim discomfort,
+after which the speaker continued the request,
+indicating persistence despite refusal."
+
+If signals are isolated and do not evolve:
+
+- escalation_detected = false
+- pattern_description = null
+
+------------------------------------------------
+CONTEXT-SPECIFIC RISK FACTORS
+------------------------------------------------
+
+The detected context may increase or decrease severity.
+
+Evaluate how harassment behavior interacts with the environment.
+
+VTC
+Confined transport environment.
+Limited exit ability increases safety risk.
+Victim discomfort or exit requests significantly increase severity.
+
+CorporateOffice
+Professional conduct standards apply.
+Manager-to-subordinate behavior increases severity.
+
+Meeting
+Public professional setting.
+Sexual remarks create reputational and HR risks.
+
+LiveStream
+Public audience exposure.
+Harassment can cause humiliation and reputational harm.
+
+E-Learning
+Instructor-student imbalance.
+Protection of minors is critical.
+
+OnlineGaming
+Often public voice chat environment.
+Targeted harassment or gender-based remarks increase severity.
+
+CallCenter
+Customer-agent interaction.
+Persistent sexual remarks toward agents create workplace risk.
+
+Telemedicine
+Medical ethics environment.
+Provider misconduct toward patient significantly increases severity.
+
+Context analysis must explain:
+
+• how the detected behavior interacts with the environment
+• why the context changes the risk level
+
+------------------------------------------------
+SEVERITY SCALE
+------------------------------------------------
+
+low
+Isolated mild comment with no distress.
+
+medium
+Clear inappropriate content but no persistence or escalation.
+
+high
+Persistent behavior, sexual explicitness,
+power imbalance, or strong discomfort signals.
+
+critical
+Victim distress combined with persistence,
+threats,
+coercion,
+physical safety concerns,
+or vulnerable context.
+
+------------------------------------------------
+SEGMENT ANALYSIS OUTPUT
+------------------------------------------------
+
+For each flagged signal return:
+
+- timestamp
+- speaker
+- text
+- category
+- severity
+- confidence
+- explanation
+
+Explanation must briefly justify the severity decision
+based on the detected behavior.
+
+Example:
+
+"The speaker requests personal contact,
+which constitutes solicitation in a professional context."
+
+------------------------------------------------
+DISTRESS DETECTION
+------------------------------------------------
+
+distress_detected = true if any victim_distress signal exists.
+
+------------------------------------------------
+EXECUTIVE SUMMARY REQUIREMENTS
+------------------------------------------------
+
+The summary must:
+
+• reflect the overall severity of the interaction
+• mention whether escalation occurred
+• briefly describe the nature of the behavior
+• mention context risk if relevant
+
+Length:
+2–3 concise sentences.
+
+Tone:
+neutral, professional, safety-oriented.
+
+------------------------------------------------
+CONTEXT ANALYSIS REQUIREMENTS
+------------------------------------------------
+
+Explain how the detected behavior interacts with the context.
+
+Length:
+2–3 sentences.
+
+Focus on:
+
+• environment risk
+• power dynamics
+• public/private setting
+• safety considerations
+
+------------------------------------------------
+NO HARASSMENT CONDITION
+------------------------------------------------
+
+If no harassment behavior is detected:
+
+Return:
+
+analysis: []
+
+escalation_detected = false
+distress_detected = false
+pattern_description = null
+
+context_analysis must state that no harassment signals were detected.
+
+summary must clearly state that the interaction appears respectful
+and no harassment risk was identified.
+
+Do NOT fabricate issues.
+
+------------------------------------------------
+OUTPUT FORMAT
+------------------------------------------------
+
+Return STRICT JSON:
+
+{
+"detected_context": "string",
+"analysis": [
+{
+"timestamp": "",
+"speaker": "",
+"text": "",
+"category": "",
+"severity": "",
+"confidence": 0.0,
+"explanation": ""
+}
+],
+"escalation_detected": boolean,
+"pattern_description": string | null,
+"distress_detected": boolean,
+"context_analysis": "",
+"summary": ""
 }
 
+NO markdown.
+NO backticks.
+NO extra commentary.`;
+function extractJson(content) {
+  const cleaned = content
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  return JSON.parse(cleaned);
+}
+
+/* ------------------------------------------------------- */
+/* STEP 1 — DETECTION ENGINE                               */
+/* Detect context + harassment signals                     */
+/* ------------------------------------------------------- */
+
+async function detectHarassmentSignals(segments) {
+
+const transcript = segments
+  .map(s => `[${s.timestamp}] ${s.text}`)
+  .join("\n");
+
+const response = await openai.chat.completions.create({
+  model: "gpt-4o-mini",
+  temperature: 0,
+    response_format: { type: "json_object" },
+  messages: [
+    {
+      role: "system",
+      content: DETECTION_SYSTEM_PROMPT
+    },
+    {
+      role: "user",
+      content: `
 ---------------------------------------
 TRANSCRIPT
 ---------------------------------------
 
-${segments.map(s => `[${s.timestamp}] ${s.text}`).join("\n")}
+${transcript}
+`
+    }
+  ]
+});
 
-`;
-
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    temperature: 0,
-    messages: [{ role: "user", content: prompt }]
-  });
-
-  const content = response.choices[0].message.content;
-
-  return extractJson(content);
+  return JSON.parse(response.choices[0].message.content);
 }
 
 /* ------------------------------------------------------- */
@@ -339,104 +640,29 @@ async function scoreHarassmentRisk(detectionResult, language = "en") {
 
   const OUTPUT_LANGUAGE = language === "fr" ? "French" : "English";
 
-  const prompt = `
-You are an enterprise harassment risk scoring engine.
+ const response = await openai.chat.completions.create({
+  model: "gpt-4o-mini",
+  temperature: 0,
+    response_format: { type: "json_object" },
+  messages: [
+    {
+      role: "system",
+      content: RISK_SCORING_SYSTEM_PROMPT
+    },
+    {
+      role: "user",
+   content: `
+OUTPUT_LANGUAGE: ${OUTPUT_LANGUAGE}
 
-Your task is to analyze previously detected harassment signals.
-
-Input includes:
-- detected_context
-- detected signals
-
-You must evaluate:
-
-• escalation patterns
-• victim distress
-• severity reasoning
-• context safety risks
-
----------------------------------------
-SEVERITY SCALE
----------------------------------------
-
-low
-medium
-high
-critical
-
----------------------------------------
-ESCALATION RULES
----------------------------------------
-
-Escalation exists when:
-
-- solicitation → refusal → persistence
-- distress → continued conduct
-- power imbalance + sexual remarks
-- repeated boundary violations
-- threats
-
----------------------------------------
-OUTPUT LANGUAGE
----------------------------------------
-
-Write all explanations in ${OUTPUT_LANGUAGE}.
-
-JSON keys remain English.
-
----------------------------------------
-OUTPUT FORMAT
----------------------------------------
-
-Return STRICT JSON:
-
-{
-"detected_context": "string",
-"analysis": [
-  {
-    "timestamp": "",
-    "speaker": "",
-    "text": "",
-    "category": "",
-    "severity": "",
-    "confidence": 0.0,
-    "explanation": ""
-  }
-],
-"escalation_detected": boolean,
-"pattern_description": string | null,
-"distress_detected": boolean,
-"context_analysis": "",
-"summary": ""
-}
-
----------------------------------------
-INPUT DETECTION DATA
----------------------------------------
+------------------------------------------------
+INPUT DATA
+------------------------------------------------
 
 ${JSON.stringify(detectionResult, null, 2)}
-
-Rules:
-
-If analysis is empty:
-
-- escalation_detected = false
-- distress_detected = false
-- pattern_description = null
-
-context_analysis should state no harassment signals detected.
-
-summary should state conversation appears respectful.
-
-Return valid JSON only.
-`;
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    temperature: 0,
-    messages: [{ role: "user", content: prompt }]
-  });
-
+`
+}
+  ]
+});
   const content = response.choices[0].message.content;
 
   return extractJson(content);

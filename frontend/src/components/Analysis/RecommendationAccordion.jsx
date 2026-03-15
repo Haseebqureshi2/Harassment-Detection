@@ -155,14 +155,13 @@ const contextRecommendations = {
 export default function RecommendationAccordion({ context, forceOpenForPdf = false }) {
   const [open, setOpen] = useState(true);
   const isOpen = forceOpenForPdf || open;
-const mappedContext = resolveContext(context);
-const hasStaticRecommendations =
-  mappedContext && contextRecommendations[mappedContext];
 
-const { t } = useTranslation();
+  const mappedContext = resolveContext(context);
+  const hasStaticRecommendations =
+    mappedContext && contextRecommendations[mappedContext];
 
-// Hide entire accordion if no recommendations
-if (!hasStaticRecommendations) return null;
+  const { t } = useTranslation();
+
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-2xl">
       <div
@@ -170,58 +169,64 @@ if (!hasStaticRecommendations) return null;
         className="flex justify-between items-center px-6 py-4 cursor-pointer"
       >
         <h3 className="font-semibold text-gray-800">
-         {t("recommendationsTitle")}
+          {t("recommendationsTitle")}
         </h3>
 
         <ChevronDown
-          className={`transition-transform duration-300 ${open ? "rotate-180" : ""
-            }`}
+          className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </div>
+
       {isOpen && (
         <div className="px-6 pb-6">
-          <p className="text-red-600 font-semibold mb-4">
-{mappedContext
-  ? t(`context_${mappedContext}`)
-  : t("context_unknown")}
-          </p>
 
-        {hasStaticRecommendations ? (
-  <div className="overflow-hidden rounded-lg border border-gray-200">
-    <table className="w-full text-sm">
-      <thead>
-        <tr className="bg-[#1F3A5F] text-white text-left">
-          <th className="px-4 py-3 font-medium">
-            {t("severityHeader")}
-          </th>
-          <th className="px-4 py-3 font-medium">
-            {t("actionsHeader")}
-          </th>
-        </tr>
-      </thead>
-
-      <tbody className="bg-white">
-        {severityLevels.map((level) => (
-          <tr key={level} className="border-t border-gray-200">
-            <td
-              className={`px-4 py-3 font-semibold ${severityColors[level]}`}
-            >
-              {t(`severity_${level.toLowerCase()}`)}
-            </td>
-
-            <td className="px-4 py-3 text-gray-700">
-              {t(contextRecommendations[mappedContext][level])}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-) : (
-  <div className="text-gray-500 text-sm italic">
-    {t("noRecommendationsAvailable")}
-  </div>
+          {/* CONTEXT LABEL */}
+      {mappedContext && (
+  <p className="text-red-600 font-semibold mb-4">
+    {t(`context_${mappedContext}`)}
+  </p>
 )}
+          {/* ===== STATIC TABLE IF CONTEXT EXISTS ===== */}
+          {hasStaticRecommendations ? (
+            <div className="overflow-hidden rounded-lg border border-gray-200">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-[#1F3A5F] text-white text-left">
+                    <th className="px-4 py-3 font-medium">
+                      {t("severityHeader")}
+                    </th>
+                    <th className="px-4 py-3 font-medium">
+                      {t("actionsHeader")}
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody className="bg-white">
+                  {severityLevels.map((level) => (
+                    <tr key={level} className="border-t border-gray-200">
+                      <td
+                        className={`px-4 py-3 font-semibold ${severityColors[level]}`}
+                      >
+                        {t(`severity_${level.toLowerCase()}`)}
+                      </td>
+
+                      <td className="px-4 py-3 text-gray-700">
+                        {t(contextRecommendations[mappedContext][level])}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            /* ===== PROFESSIONAL MESSAGE IF CONTEXT UNKNOWN ===== */
+            <div className="bg-white border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
+              These are suggested actions based on the severity level detected by
+              our AI. In production, our API returns the severity and findings —
+              you decide how to handle them in your own system.
+            </div>
+          )}
+
         </div>
       )}
     </div>
