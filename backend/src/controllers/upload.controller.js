@@ -46,12 +46,21 @@ export async function handleUpload(req, res) {
       : file.path;
 
     // ✅ Transcribe
-    const transcription = await transcribeAudio(audioPath);
+// ✅ Transcribe
+const transcription = await transcribeAudio(audioPath);
 
-    if (!transcription?.segments?.length) {
-      throw new Error("Transcription failed or empty audio");
-    }
+if (!transcription?.segments?.length) {
+  throw new Error("Transcription failed or empty audio");
+}
 
+// DEBUG: what Whisper actually transcribed
+console.log("---- WHISPER TRANSCRIPT ----");
+
+transcription.segments.forEach((s, i) => {
+  console.log(
+    `[${s.start.toFixed(2)} - ${s.end.toFixed(2)}] ${s.text}`
+  );
+});
     // 1️⃣ Normalize transcript
     const normalized = normalizeTranscript(transcription.segments);
 

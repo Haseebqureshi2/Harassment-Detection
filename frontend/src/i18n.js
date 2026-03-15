@@ -493,7 +493,7 @@ terms_intro_p1:
     severabilityText:
       "If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will remain in full force and effect.",
 
-    contactTitle: "17. Contact Us",
+    contactTerm: "17. Contact Us",
     email: "Email",
     company: "IJATECH",
     address1: "60 rue de l'Aigle",
@@ -777,7 +777,7 @@ disputeTitle: "15. Résolution des litiges",
     severabilityText:
       "Si une disposition des présentes Conditions est jugée inapplicable ou invalide, cette disposition sera limitée ou supprimée dans la mesure minimale nécessaire, et les autres dispositions resteront pleinement en vigueur.",
 
-    contactTitle: "17. Contact",
+    contactTerm: "17. Contactez-nous",
     email: "Email",
     company: "IJATECH",
     address1: "60 rue de l'Aigle",

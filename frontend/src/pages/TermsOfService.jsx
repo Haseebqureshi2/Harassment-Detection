@@ -360,7 +360,7 @@ const sections = [
 {/* 17 */}
 <section id="contact">
   <h2 className="text-lg font-semibold text-[rgb(51,210,152)] mb-3">
-   {t("contactTitle")}
+   {t("contactTerm")}
   </h2>
 
   <div className="bg-white rounded-xl border border-gray-300 p-6">

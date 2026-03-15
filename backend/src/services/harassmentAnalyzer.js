@@ -1,8 +1,14 @@
 import OpenAI from "openai";
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+/* ------------------------------------------------------- */
+/* UTIL: JSON EXTRACTION                                   */
+/* ------------------------------------------------------- */
 
 function extractJson(content) {
-  // Remove markdown fences if present
   const cleaned = content
     .replace(/```json/g, "")
     .replace(/```/g, "")
@@ -10,308 +16,374 @@ function extractJson(content) {
 
   return JSON.parse(cleaned);
 }
-export async function analyzeHarassment(segments, language = "en") {
-  const OUTPUT_LANGUAGE =
-  language === "fr"
-    ? "French"
-    : "English";
+
+/* ------------------------------------------------------- */
+/* STEP 1 — DETECTION ENGINE                               */
+/* Detect context + harassment signals                     */
+/* ------------------------------------------------------- */
+
+async function detectHarassmentSignals(segments) {
+
 const prompt = `
-You are an enterprise-grade sexual harassment risk detection system used for safety compliance and incident escalation.
-Target Output Language: ${OUTPUT_LANGUAGE}
-Your task is to analyze an audio conversation transcript and detect sexual harassment behaviors, escalation patterns, power imbalance risks, and victim distress.
+You are a harassment signal detection system used in safety monitoring.
 
-This system operates across MULTIPLE contexts:
+Your role is to detect ANY potential harassment signals in a conversation transcript.
 
-- VTC (Vehicle Transport Context – rideshare, taxi, private transport)
-- CorporateOffice (general workplace / corporate office environment)
-- Meeting (formal workplace meeting context)
-- LiveStream (public broadcast / creator-audience interaction)
-- E-Learning (educational / instructor-student setting)
-- OnlineGaming (multiplayer voice or in-game chat communication)
-- CallCenter (customer service or support call environment)
-- Telemedicine (virtual healthcare consultation / online medical appointment) 
+This stage prioritizes HIGH RECALL.
+If a segment may indicate harassment behavior,
+it should be flagged.
 
-These examples are illustrative only.
-The system MUST generalize to ANY real-world or digital interaction context including social, professional, medical, entertainment, domestic, public, private, anonymous, or hybrid environments.
-No context is provided.
-You MUST infer the interaction environment from transcript evidence.
-
-The interaction context represents the real-world or digital setting
-in which the conversation most likely occurs.
-
-You MUST:
-- Identify power dynamics
-- Identify physical safety constraints
-- Identify professional or ethical standards
-- Identify public exposure or reputational risk
-- Adjust severity accordingly
-
-Context awareness must reflect realistic human safety risk, not just category matching.
-
-For ANY context:
-- Sexual remarks combined with power imbalance increase severity.
-- Confinement or restricted exit increases severity.
-- Public humiliation increases severity.
-- Professional or fiduciary duty violations increase severity.
-- Vulnerable individuals (minors, patients, subordinates) increase severity.
-
-You MUST adjust severity assessment based on context.
-
-Based ONLY on the transcript, determine the most likely interaction environment.
-Examples of contexts include (NOT exhaustive):
-
-- VTC
-- CorporateOffice
-- Meeting
-- LiveStream
-- E-Learning
-- OnlineGaming
-- CallCenter
-- Telemedicine
-These are examples only.
-You MUST NOT restrict inference to this list.
-Rules:
-- Use transcript evidence only.
-- Do not guess without signals.
-- If unclear, return "Unknown".
-
-Return as:
-"detected_context": string
----------------------------------------
-CORE ANALYSIS PRINCIPLES
----------------------------------------
-
-1. Analyze the conversation as a SEQUENCE over time.
-   Harassment risk is determined by behavioral progression, not isolated sentences.
-
-2. Identify roles dynamically:
-   - victim: expresses discomfort, refusal, fear, request to stop, or exit attempts
-   - harasser: initiates or persists in inappropriate conduct
-   - bystander: third-party commentary
-   - unknown: cannot determine reliably
-
-3. NEVER:
-   - Merge victim and harasser speech into a single finding
-   - Attribute refusal_ignored to victim
-   - Infer facts not present in transcript
-   - Use "grooming" unless long-term manipulation of a minor is clearly present
+Later systems will evaluate severity and risk.
 
 ---------------------------------------
-HARASSMENT CATEGORIES
+YOUR TASK
+---------------------------------------
+
+1. Identify the likely interaction context.
+2. Detect behavioral signals of harassment.
+
+Do NOT calculate severity.
+Do NOT summarize the conversation.
+---------------------------------------
+CONTEXT DETECTION
+---------------------------------------
+
+Infer the MOST LIKELY interaction environment from the transcript.
+
+You must attempt context inference even if signals are weak.
+
+Do NOT default to "Unknown" unless there is truly no evidence.
+
+Possible contexts include:
+
+VTC
+CorporateOffice
+Meeting
+LiveStream
+E-Learning
+OnlineGaming
+CallCenter
+Telemedicine
+
+These represent common environments but are not exhaustive.
+
+---------------------------------------
+CONTEXT INFERENCE STRATEGY
+---------------------------------------
+
+Use conversational clues such as:
+
+• roles between speakers  
+• references to location or service  
+• professional language or hierarchy  
+• audience interaction  
+• gameplay or streaming terminology  
+• customer service patterns  
+• medical or educational dialogue  
+
+Even small clues may indicate the likely environment.
+
+---------------------------------------
+CONTEXT CLUE EXAMPLES
+---------------------------------------
+
+VTC
+transportation, pickup/dropoff discussion, directions,
+driver-passenger interaction, references to rides.
+
+CorporateOffice
+coworker interaction, workplace tasks, professional language,
+references to managers, HR, deadlines, projects.
+
+Meeting
+structured discussion, multiple speakers presenting ideas,
+agenda or formal discussion tone.
+
+LiveStream
+references to audience, viewers, chat, donations,
+or performing for an online audience.
+
+E-Learning
+teacher-student interaction, learning explanations,
+homework, lessons, instruction.
+
+OnlineGaming
+game terminology, teammates, voice chat coordination,
+player interaction during gameplay.
+
+CallCenter
+customer support interaction, problem resolution,
+service requests, scripted assistance language.
+
+Telemedicine
+medical consultation, symptoms, diagnosis,
+health advice, doctor-patient discussion.
+
+---------------------------------------
+INFERENCE RULE
+---------------------------------------
+
+Choose the MOST LIKELY context based on available evidence.
+
+If multiple contexts could apply,
+select the one that best fits the conversation structure.
+
+---------------------------------------
+UNKNOWN CONDITION
+---------------------------------------
+
+Return "Unknown" ONLY if the conversation contains
+no contextual clues at all about the interaction setting.
+
+Examples of when Unknown is acceptable:
+
+• very short conversations
+• purely casual chat without environmental signals
+• incomplete transcripts
+
+---------------------------------------
+RETURN FORMAT
+---------------------------------------
+
+"detected_context": "string"
+
+---------------------------------------
+HARASSMENT SIGNAL CATEGORIES
 ---------------------------------------
 
 Allowed categories:
-- compliment
-- solicitation
-- objectification
-- sexual_explicit
-- coercion
-- intimidation
-- boundary_violation
-- victim_distress
-- refusal_ignored
-- threat
 
-Category Definitions:
-
-compliment:
-Non-sexual positive remark. Low severity unless persistent or escalating.
-
-solicitation:
-Request for romantic/sexual engagement or personal contact.
-
-objectification:
-Reducing a person to physical attributes in a sexualized manner.
-
-sexual_explicit:
-Clear sexual language or graphic content.
-
-coercion:
-Pressuring someone after hesitation or refusal.
-
-intimidation:
-Implied consequences, power imbalance pressure, authority misuse.
-
-boundary_violation:
-Familiar or sexualized language after discomfort or boundary expression.
-
-victim_distress:
-Explicit discomfort, fear, refusal, request to stop, attempt to exit.
-
-refusal_ignored:
-Harasser continues inappropriate behavior AFTER refusal/distress.
-
-threat:
-Explicit or implied harm, retaliation, or unsafe environment creation.
+compliment  
+solicitation  
+objectification  
+sexual_explicit  
+coercion  
+intimidation  
+boundary_violation  
+victim_distress  
+refusal_ignored  
+threat  
 
 ---------------------------------------
-ESCALATION LOGIC
+BEHAVIORAL INTERPRETATION RULES
 ---------------------------------------
 
-Escalation is detected when:
-- Solicitation → refusal → persistence
-- Distress → continued inappropriate conduct
-- Power imbalance + sexual remarks
-- Attempts to exit blocked or minimized
-- Repeated boundary violations
+You must detect harassment based on BEHAVIORAL PATTERNS,
+not only explicit sexual language.
 
-If escalation pattern exists:
-- escalation_detected = true
-- pattern_description must clearly describe the behavioral progression.
+Consider the following patterns.
 
 ---------------------------------------
-CONTEXT-SPECIFIC SEVERITY ADJUSTMENTS
+
+SOLICITATION
+
+Attempts to initiate romantic, sexual, or private interaction.
+
+This includes:
+
+• requesting personal contact information  
+• requesting to meet privately  
+• asking someone to come to a private place  
+• expressing romantic or sexual interest toward the other person  
+• suggesting spending time alone  
+
+The wording may be indirect or casual.
+
 ---------------------------------------
 
-VTC:
-- Confined physical environment
-- Limited ability to exit
-- High safety sensitivity
-Victim distress here significantly increases risk.
-Physical exit requests elevate severity.
+OBJECTIFICATION
 
-Meeting:
-- Workplace policies apply
-- Power hierarchy matters
-Sexual remarks from senior to junior increase severity.
+Sexualized focus on someone's body or appearance.
 
-LiveStream:
-- Public humiliation risk
-- Audience amplification
-Harassment in front of viewers increases reputational harm risk.
+---------------------------------------
 
-E-Learning:
-- Instructor-student imbalance
-- Minor protection sensitivity
-Any sexualization involving minors = CRITICAL.
+SEXUAL_EXPLICIT
 
-CorporateOffice:
+Direct sexual language or propositions.
 
-HR and workplace conduct standards apply
+---------------------------------------
 
-Peer-to-peer harassment still high risk
+COERCION
 
-Manager → subordinate increases severity
+Pressure applied after hesitation or refusal.
 
-Persistent comments create hostile work environment risk
+---------------------------------------
 
-Sexual jokes in professional setting elevate severity
+INTIMIDATION
 
-OnlineGaming:
+Insults, degrading language, humiliation, or aggressive tone.
 
-Often anonymous but still actionable misconduct
+---------------------------------------
 
-Repeated sexual remarks or targeting of a player increases severity
+BOUNDARY VIOLATION
 
-Gender-targeted harassment is high risk
+Familiar or personal remarks after discomfort is expressed.
 
-Public voice channel humiliation increases escalation score
+---------------------------------------
 
-Threats involving doxxing or stalking = critical
+VICTIM DISTRESS
 
-CallCenter:
+Statements indicating discomfort, confusion, refusal, or resistance.
 
-Recorded compliance environment
+Examples of signals:
 
-Power imbalance may be reversed (customer harassing agent)
+• asking someone to repeat themselves
+• questioning inappropriate behavior
+• expressing refusal
+• expressing confusion or discomfort
 
-Persistent sexual remarks toward agent elevate severity
+---------------------------------------
 
-If agent harasses customer → high corporate liability
+REFUSAL IGNORED
 
-Distress from agent indicates unsafe work environment
+The same request or inappropriate behavior continues after
+the other person shows discomfort or refusal.
 
-Telemedicine:
+---------------------------------------
 
-Medical ethics and professional conduct apply
+THREAT
 
-Provider → patient sexual remarks = high or critical
+Statements implying harm, retaliation, or unsafe consequences.
 
-Vulnerable patient context increases severity
+---------------------------------------
+PERSISTENCE DETECTION
+---------------------------------------
 
-Requests for unnecessary personal/sexual info escalate risk
+If a person repeats requests for:
 
-Any sexualization of minors = critical
+• personal contact
+• meeting privately
+• romantic or sexual interaction
+
+across multiple segments,
+each instance should be flagged as solicitation.
+
+---------------------------------------
+LOW CONFIDENCE RULE
+---------------------------------------
+
+If a segment might indicate harassment but certainty is low,
+still include it with lower confidence (0.4–0.6).
+
+Do not ignore possible signals.
+
+---------------------------------------
+ROLE IDENTIFICATION
+---------------------------------------
+
+speaker must be one of:
+
+victim
+harasser
+bystander
+unknown
+
+The speaker initiating inappropriate behavior
+is usually the harasser.
+
+---------------------------------------
+FOR EACH SIGNAL RETURN
+---------------------------------------
+
+- timestamp
+- speaker
+- text
+- category
+- confidence (0.0–1.0)
+
+---------------------------------------
+OUTPUT FORMAT
+---------------------------------------
+
+Return STRICT JSON:
+
+{
+  "detected_context": "string",
+  "analysis": [
+    {
+      "timestamp": "",
+      "speaker": "",
+      "text": "",
+      "category": "",
+      "confidence": 0.0
+    }
+  ]
+}
+
+---------------------------------------
+TRANSCRIPT
+---------------------------------------
+
+${segments.map(s => `[${s.timestamp}] ${s.text}`).join("\n")}
+
+`;
+
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    temperature: 0,
+    messages: [{ role: "user", content: prompt }]
+  });
+
+  const content = response.choices[0].message.content;
+
+  return extractJson(content);
+}
+
+/* ------------------------------------------------------- */
+/* STEP 2 — RISK SCORING ENGINE                            */
+/* Calculate escalation + severity + summary               */
+/* ------------------------------------------------------- */
+
+async function scoreHarassmentRisk(detectionResult, language = "en") {
+
+  const OUTPUT_LANGUAGE = language === "fr" ? "French" : "English";
+
+  const prompt = `
+You are an enterprise harassment risk scoring engine.
+
+Your task is to analyze previously detected harassment signals.
+
+Input includes:
+- detected_context
+- detected signals
+
+You must evaluate:
+
+• escalation patterns
+• victim distress
+• severity reasoning
+• context safety risks
+
 ---------------------------------------
 SEVERITY SCALE
 ---------------------------------------
 
-low:
-Isolated mild comment, no distress.
-
-medium:
-Clear inappropriate content, no escalation.
-
-high:
-Persistent behavior, power imbalance, explicit content.
-
-critical:
-Victim distress + persistence,
-Threats,
-Physical safety risk,
-Minor involvement,
-Coercion or intimidation.
+low
+medium
+high
+critical
 
 ---------------------------------------
-FOR EACH FLAGGED SEGMENT RETURN:
+ESCALATION RULES
 ---------------------------------------
 
-- timestamp
-- speaker ("victim" | "harasser" | "bystander" | "unknown")
-- text
-- category
-- severity (low | medium | high | critical)
-- confidence (0.0–1.0)
-- explanation (brief behavioral reasoning)
+Escalation exists when:
+
+- solicitation → refusal → persistence
+- distress → continued conduct
+- power imbalance + sexual remarks
+- repeated boundary violations
+- threats
 
 ---------------------------------------
-TOP-LEVEL FIELDS REQUIRED:
+OUTPUT LANGUAGE
 ---------------------------------------
 
-- escalation_detected (boolean)
-- pattern_description (string or null)
-- distress_detected (boolean)
-- context_analysis (2–3 sentences explaining risk within provided context)
-- summary (2–3 sentence executive-level risk summary based)
+Write all explanations in ${OUTPUT_LANGUAGE}.
 
-If score = 0 and no findings exist:
+JSON keys remain English.
 
-The summary, context_analysis and pattern_description MUST clearly state that the conversation appears respectful and no sexual harassment or safety risk was detected.
-The tone should be positive and reassuring.
----------------------------------------
-NO HARASSMENT CONDITION
----------------------------------------
-
-If no sexual harassment behavior, escalation, boundary violation, or victim distress is detected:
-
-- Return "analysis" as an empty array []
-- escalation_detected = false
-- distress_detected = false
-- pattern_description = null
-- context_analysis must briefly state that no harassment indicators were detected in the provided context
-- summary must clearly state that no sexual harassment risk was identified
-- but still the context should detected.
-Do NOT fabricate minor issues.
-Do NOT over-classify neutral interactions.
-False positives must be avoided.
-
-OUTPUT LANGUAGE REQUIREMENT
----------------------------------------
-
-The analysis output MUST be written entirely in ${OUTPUT_LANGUAGE}.
-
-Rules:
-- JSON keys MUST remain in English.
-- JSON structure MUST NOT change.
-- All human-readable fields MUST be in ${OUTPUT_LANGUAGE}:
-  - explanation
-  - pattern_description
-  - context_analysis
-  - summary
-
-Do NOT translate category names or severity labels.
-Do NOT mix languages.
-Do NOT output English if ${OUTPUT_LANGUAGE} is French.
 ---------------------------------------
 OUTPUT FORMAT
 ---------------------------------------
@@ -320,23 +392,43 @@ Return STRICT JSON:
 
 {
 "detected_context": "string",
-  "analysis": [],
-  "escalation_detected": boolean,
-  "pattern_description": string | null,
-  "distress_detected": boolean,
-  "context_analysis": string,
-  "summary": string,
+"analysis": [
+  {
+    "timestamp": "",
+    "speaker": "",
+    "text": "",
+    "category": "",
+    "severity": "",
+    "confidence": 0.0,
+    "explanation": ""
+  }
+],
+"escalation_detected": boolean,
+"pattern_description": string | null,
+"distress_detected": boolean,
+"context_analysis": "",
+"summary": ""
 }
 
-NO markdown.
-NO backticks.
-NO additional commentary.
-
 ---------------------------------------
-CONVERSATION TRANSCRIPT:
+INPUT DETECTION DATA
 ---------------------------------------
 
-${segments.map(s => `[${s.timestamp}] ${s.text}`).join("\n")}
+${JSON.stringify(detectionResult, null, 2)}
+
+Rules:
+
+If analysis is empty:
+
+- escalation_detected = false
+- distress_detected = false
+- pattern_description = null
+
+context_analysis should state no harassment signals detected.
+
+summary should state conversation appears respectful.
+
+Return valid JSON only.
 `;
 
   const response = await openai.chat.completions.create({
@@ -347,11 +439,22 @@ ${segments.map(s => `[${s.timestamp}] ${s.text}`).join("\n")}
 
   const content = response.choices[0].message.content;
 
-  try {
-    return extractJson(content);
-  } catch (err) {
-    console.error("❌ JSON parse failed");
-    console.error("Raw LLM response:\n", content);
-    throw new Error("Invalid analysis response from AI");
-  }
+  return extractJson(content);
+}
+
+/* ------------------------------------------------------- */
+/* MAIN PIPELINE                                           */
+/* ------------------------------------------------------- */
+
+export async function analyzeHarassment(segments, language = "en") {
+
+  /* STEP 1: detection */
+
+  const detection = await detectHarassmentSignals(segments);
+
+  /* STEP 2: risk scoring */
+
+  const finalAnalysis = await scoreHarassmentRisk(detection, language);
+
+  return finalAnalysis;
 }

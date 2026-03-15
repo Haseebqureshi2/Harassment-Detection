@@ -1,18 +1,15 @@
 import Feedback from "../models/feedback.model.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { feedbackConfirmationTemplate } from "../utils/feedbackConfirmation.js";
-
+import fs from "fs";
 export const createFeedback = async (req, res) => {
   try {
-    const payload = JSON.parse(req.body.payload);
-    
-if (!payload.companySize) {
-  delete payload.companySize;
-}
+    // ---------- Parse payload safely ----------
+    const payload = JSON.parse(req.body.payload || "{}");
+
     const {
       firstName,
       email,
-      sessionId,
       riskScore,
       severity,
       context,
@@ -22,22 +19,33 @@ if (!payload.companySize) {
       analysisData,
       mode,
     } = payload;
+console.log("BODY:", req.body);
+console.log("FILE:", req.file);
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
 
+    // Remove empty optional fields
+    if (!payload.companySize) delete payload.companySize;
+
+    // ---------- Save feedback ----------
     const feedback = await Feedback.create({
       ...payload,
       user: req.user?._id,
     });
 
-    const includeAttachments = mode === "pdf" || mode === "json";
-
-const html = feedbackConfirmationTemplate({
-  firstName: firstName || "there",
-  prototypeUrl: "https://safeai-tech.com/prototype",
-  privacyUrl: "https://safeai-tech.com/privacy",
-  termsUrl: "https://safeai-tech.com/terms",
-  unsubscribeUrl: `https://safeai-tech.com/unsubscribe?email=${encodeURIComponent(email)}`,
-  data: {
-        includeAttachments,
+    // ---------- Email HTML ----------
+    const html = feedbackConfirmationTemplate({
+      firstName: firstName || "there",
+      prototypeUrl: "https://safeai-tech.com/prototype",
+      privacyUrl: "https://safeai-tech.com/privacy",
+      termsUrl: "https://safeai-tech.com/terms",
+      unsubscribeUrl: `https://safeai-tech.com/unsubscribe?email=${encodeURIComponent(email)}`,
+      data: {
+        includeAttachments: mode === "pdf" || mode === "json",
         riskScore,
         severity,
         context,
@@ -49,31 +57,36 @@ const html = feedbackConfirmationTemplate({
       },
     });
 
-  const attachments = [];
+    // ---------- Build attachments ----------
+    const attachments = [];
 
-// ---------- JSON ----------
-if (mode === "pdf" || mode === "json") {
-  const jsonBuffer = Buffer.from(
-    JSON.stringify(analysisData, null, 2)
-  );
+    // JSON attachment
+    if (mode === "pdf" || mode === "json") {
+      attachments.push({
+        filename: "SafeAI_Analysis_Data.json",
+        content: Buffer.from(
+          JSON.stringify(analysisData, null, 2)
+        ).toString("base64"),
+        type: "application/json",
+        disposition: "attachment",
+      });
+    }
 
-  attachments.push({
-    filename: "SafeAI_Analysis_Data.json",
-    content: jsonBuffer.toString("base64"), // ✅ SendGrid requires base64
-    type: "application/json",
-    disposition: "attachment"
-  });
-}
+    // PDF attachment
+   // PDF attachment
+if (req.file?.path) {
+  const pdfBuffer = fs.readFileSync(req.file.path);
 
-// ---------- PDF ----------
-if (req.file) {
   attachments.push({
     filename: "SafeAI_Analysis_Report.pdf",
-    content: req.file.buffer.toString("base64"), // ✅ convert buffer
+    content: pdfBuffer.toString("base64"),
     type: "application/pdf",
-    disposition: "attachment"
+    disposition: "attachment",
   });
 }
+console.log("Attachments:", attachments);
+
+    // ---------- Send Email ----------
     await sendEmail({
       to: email,
       subject: "Your SafeAI Analysis Report",
@@ -81,21 +94,21 @@ if (req.file) {
       attachments,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Feedback submitted successfully",
       data: feedback,
     });
+
   } catch (error) {
     console.error("Feedback Error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to submit feedback",
     });
   }
 };
-// ADMIN — GET ALL FEEDBACK
 export const getAllFeedback = async (req, res) => {
   try {
     const feedback = await Feedback.find()
@@ -115,10 +128,6 @@ export const getAllFeedback = async (req, res) => {
     });
   }
 };
-
-
-
-// ADMIN — GET SINGLE FEEDBACK
 export const getFeedbackById = async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);

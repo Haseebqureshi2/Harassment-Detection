@@ -7,90 +7,96 @@ const severityColors = {
   Medium: "bg-yellow-200 text-yellow-900",
   Low: "bg-green-200 text-green-900",
 };
+// ------------------------------------
+// Context keyword dictionary
+// ------------------------------------
+const CONTEXT_KEYWORDS = {
+  vtc: [
+    // English
+    "vehicle","ride","taxi","transport","chauffeur","driver",
+    "pickup","dropoff","transfer","cab","uber","car service",
+
+    // French
+    "vtc","voiture","trajet","course","déplacement",
+    "prise en charge","transfert","conducteur"
+  ],
+
+  corporate: [
+    // English
+    "office","workplace","corporate","meeting","company",
+    "business","enterprise","work","conference","team",
+
+    // French
+    "bureau","entreprise","travail","réunion",
+    "société","professionnel","conférence","équipe"
+  ],
+
+  education: [
+    // English
+    "class","student","training","learning","education",
+    "course","school","teacher","lesson","academy",
+
+    // French
+    "cours","école","formation","étudiant",
+    "apprentissage","enseignement","classe","académie"
+  ],
+
+  gaming: [
+    // English
+    "game","gaming","player","match","multiplayer",
+    "console","esports","play",
+
+    // French
+    "jeu","joueur","partie","multijoueur","console","esport"
+  ],
+
+  livestream: [
+    // English
+    "stream","live","broadcast","streaming","webcast",
+
+    // French
+    "diffusion","direct","diffusion en direct","émission"
+  ],
+
+  callcenter: [
+    // English
+    "support","customer","call","helpdesk","hotline",
+    "agent","customer service",
+
+    // French
+    "service client","assistance","appel",
+    "centre d'appel","support client","conseiller"
+  ],
+
+  healthcare: [
+    // English
+    "medical","doctor","patient","health","clinic",
+    "hospital","nurse","therapy","treatment",
+
+    // French
+    "médecin","santé","patient","clinique",
+    "hôpital","infirmier","consultation","soin","traitement"
+  ]
+};
+
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 function resolveContext(context = "") {
   if (!context) return null;
 
-  const c = context.toLowerCase();
+  const c = normalize(context);
 
-  // ---- VTC ----
-  if (
-    c.includes("vehicle") ||
-    c.includes("ride") ||
-    c.includes("taxi") ||
-    c.includes("transport") ||
-    c.includes("chauffeur") ||
-    c.includes("voiture")
-  ) {
-    return "vtc";
-  }
+  for (const [category, keywords] of Object.entries(CONTEXT_KEYWORDS)) {
+    const match = keywords.some((word) =>
+      c.includes(normalize(word))
+    );
 
-  // ---- Corporate / Office ----
-  if (
-    c.includes("office") ||
-    c.includes("workplace") ||
-    c.includes("corporate") ||
-    c.includes("meeting") ||
-    c.includes("bureau") ||
-    c.includes("entreprise") ||
-    c.includes("travail")
-  ) {
-    return "corporate";
-  }
-
-  // ---- Education ----
-  if (
-    c.includes("class") ||
-    c.includes("student") ||
-    c.includes("training") ||
-    c.includes("learning") ||
-    c.includes("education") ||
-    c.includes("cours") ||
-    c.includes("école") ||
-    c.includes("formation")
-  ) {
-    return "education";
-  }
-
-  // ---- Gaming ----
-  if (
-    c.includes("game") ||
-    c.includes("gaming") ||
-    c.includes("player") ||
-    c.includes("jeu")
-  ) {
-    return "gaming";
-  }
-
-  // ---- Livestream ----
-  if (
-    c.includes("stream") ||
-    c.includes("live") ||
-    c.includes("broadcast") ||
-    c.includes("diffusion")
-  ) {
-    return "livestream";
-  }
-
-  // ---- Call Center ----
-  if (
-    c.includes("support") ||
-    c.includes("customer") ||
-    c.includes("call") ||
-    c.includes("service client")
-  ) {
-    return "callcenter";
-  }
-
-  // ---- Healthcare ----
-  if (
-    c.includes("medical") ||
-    c.includes("doctor") ||
-    c.includes("patient") ||
-    c.includes("health") ||
-    c.includes("médecin") ||
-    c.includes("santé")
-  ) {
-    return "healthcare";
+    if (match) return category;
   }
 
   return null;
