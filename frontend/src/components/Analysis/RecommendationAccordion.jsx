@@ -186,44 +186,45 @@ export default function RecommendationAccordion({ context, forceOpenForPdf = fal
     {t(`context_${mappedContext}`)}
   </p>
 )}
-          {/* ===== STATIC TABLE IF CONTEXT EXISTS ===== */}
-          {hasStaticRecommendations ? (
-            <div className="overflow-hidden rounded-lg border border-gray-200">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-[#1F3A5F] text-white text-left">
-                    <th className="px-4 py-3 font-medium">
-                      {t("severityHeader")}
-                    </th>
-                    <th className="px-4 py-3 font-medium">
-                      {t("actionsHeader")}
-                    </th>
-                  </tr>
-                </thead>
+    
+    {/* ===== ALWAYS SHOW MESSAGE ===== */}
+<div className="bg-white border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed mb-4">
+   {t("recommendation_message")}
+</div>
 
-                <tbody className="bg-white">
-                  {severityLevels.map((level) => (
-                    <tr key={level} className="border-t border-gray-200">
-                      <td
-                        className={`px-4 py-3 font-semibold ${severityColors[level]}`}
-                      >
-                        {t(`severity_${level.toLowerCase()}`)}
-                      </td>
+{/* ===== TABLE ONLY IF CONTEXT EXISTS ===== */}
+{hasStaticRecommendations && (
+  <div className="overflow-hidden rounded-lg border border-gray-200">
+    <table className="w-full text-sm">
+      <thead>
+        <tr className="bg-[#1F3A5F] text-white text-left">
+          <th className="px-4 py-3 font-medium">
+            {t("severityHeader")}
+          </th>
+          <th className="px-4 py-3 font-medium">
+            {t("actionsHeader")}
+          </th>
+        </tr>
+      </thead>
 
-                      <td className="px-4 py-3 text-gray-700">
-                        {t(contextRecommendations[mappedContext][level])}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            /* ===== PROFESSIONAL MESSAGE IF CONTEXT UNKNOWN ===== */
-            <div className="bg-white border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
-             These are suggested actions based on the severity level detected by our AI. In production, our API returns the severity and findings — you decide how to handle them in your own system. If our AI does not detect any context, we will not be able to suggest you a recommendation table.
-            </div>
-          )}
+      <tbody className="bg-white">
+        {severityLevels.map((level) => (
+          <tr key={level} className="border-t border-gray-200">
+            <td
+              className={`px-4 py-3 font-semibold ${severityColors[level]}`}
+            >
+              {t(`severity_${level.toLowerCase()}`)}
+            </td>
+
+            <td className="px-4 py-3 text-gray-700">
+              {t(contextRecommendations[mappedContext][level])}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
         </div>
       )}

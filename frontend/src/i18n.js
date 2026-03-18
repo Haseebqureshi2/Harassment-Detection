@@ -5,6 +5,9 @@ import LanguageDetector from "i18next-browser-languagedetector";
 const resources = {
   EN: {
     translation: {
+      
+  recommendation_message: "These are suggested actions based on the severity level detected by our AI. In production, our API returns the severity and findings — you decide how to handle them in your own system. If our AI does not detect any context, we will not be able to suggest a recommendation table.",
+
       privacySections: "SECTIONS",
 privacyLegalDocument: "LEGAL DOCUMENT",
 privacy_cookies_text:
@@ -1221,7 +1224,10 @@ privacy_data_collect_feedback_p:
 privacy_data_collect_technical_title: "3.5 Données techniques",
 privacy_data_collect_technical_p:
   "Nous collectons automatiquement certaines informations techniques, notamment l’adresse IP, le type de navigateur, les informations sur l’appareil et les données d’utilisation à des fins de sécurité et d’analyse.",
-terms_intro_title: "1. Introduction",
+
+  recommendation_message: "Voici des actions suggérées basées sur le niveau de gravité détecté par notre IA. En production, notre API retourne la gravité et les résultats — vous décidez comment les gérer dans votre propre système. Si notre IA ne détecte aucun contexte, nous ne pourrons pas vous proposer un tableau de recommandations.",
+
+  terms_intro_title: "1. Introduction",
 terms_company_title: "2. Informations sur l’entreprise",
 terms_service_title: "3. Description du service",
 terms_prototype_title: "4. Statut du prototype",
