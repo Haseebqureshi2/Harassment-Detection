@@ -221,9 +221,7 @@ export default function RecommendationAccordion({ context, forceOpenForPdf = fal
           ) : (
             /* ===== PROFESSIONAL MESSAGE IF CONTEXT UNKNOWN ===== */
             <div className="bg-white border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
-              These are suggested actions based on the severity level detected by
-              our AI. In production, our API returns the severity and findings —
-              you decide how to handle them in your own system.
+             These are suggested actions based on the severity level detected by our AI. In production, our API returns the severity and findings — you decide how to handle them in your own system. If our AI does not detect any context, we will not be able to suggest you a recommendation table.
             </div>
           )}
 
