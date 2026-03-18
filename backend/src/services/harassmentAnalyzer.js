@@ -4,10 +4,30 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+function extractJson(content) {
+  const cleaned = content
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  return JSON.parse(cleaned);
+}
+
 /* ------------------------------------------------------- */
-/* UTIL: JSON EXTRACTION                                   */
+/* SINGLE LLM PIPELINE                                     */
 /* ------------------------------------------------------- */
-const DETECTION_SYSTEM_PROMPT = `You are a harassment signal detection system used in safety monitoring.
+
+export async function analyzeHarassment(segments, language = "en") {
+
+  const transcript = segments
+    .map(s => `[${s.timestamp}] ${s.text}`)
+    .join("\n");
+
+  const OUTPUT_LANGUAGE = language === "fr" ? "French" : "English";
+
+
+const SYSTEM_PROMPT = `
+You are a harassment signal detection system used in safety monitoring.
 
 Your role is to detect ANY potential harassment signals in a conversation transcript.
 
@@ -274,31 +294,13 @@ FOR EACH SIGNAL RETURN
 - category
 - confidence (0.0–1.0)
 
----------------------------------------
-OUTPUT FORMAT
----------------------------------------
 
-Return STRICT JSON:
-
-{
-  "detected_context": "string",
-  "analysis": [
-    {
-      "timestamp": "",
-      "speaker": "",
-      "text": "",
-      "category": "",
-      "confidence": 0.0
-    }
-  ]
-}`;
-
-const RISK_SCORING_SYSTEM_PROMPT = `You are an enterprise harassment risk scoring engine.
+And You are an enterprise harassment risk scoring engine.
 
 Your role is to evaluate previously detected behavioral signals
 and determine the harassment risk level of the interaction.
 
-Input contains:
+as you have:
 - detected_context
 - detected behavioral signals
 
@@ -585,102 +587,45 @@ Return STRICT JSON:
 
 NO markdown.
 NO backticks.
-NO extra commentary.`;
-function extractJson(content) {
-  const cleaned = content
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
+NO extra commentary.
+================================================
 
-  return JSON.parse(cleaned);
-}
+FINAL INSTRUCTION:
 
-/* ------------------------------------------------------- */
-/* STEP 1 — DETECTION ENGINE                               */
-/* Detect context + harassment signals                     */
-/* ------------------------------------------------------- */
+You MUST perform BOTH stages internally:
 
-async function detectHarassmentSignals(segments) {
+1. Detect harassment signals and context
+2. Immediately perform risk scoring using those detected signals
 
-const transcript = segments
-  .map(s => `[${s.timestamp}] ${s.text}`)
-  .join("\n");
+Do NOT output intermediate detection results.
 
-const response = await openai.chat.completions.create({
-  model: "gpt-4o-mini",
-  temperature: 0,
+Return ONLY the FINAL OUTPUT FORMAT defined in the risk scoring section.
+
+OUTPUT_LANGUAGE: ${OUTPUT_LANGUAGE}
+`;
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    temperature: 0,
     response_format: { type: "json_object" },
-  messages: [
-    {
-      role: "system",
-      content: DETECTION_SYSTEM_PROMPT
-    },
-    {
-      role: "user",
-      content: `
+    messages: [
+      {
+        role: "system",
+        content: SYSTEM_PROMPT
+      },
+      {
+        role: "user",
+        content: `
 ---------------------------------------
 TRANSCRIPT
 ---------------------------------------
 
 ${transcript}
 `
-    }
-  ]
-});
+      }
+    ]
+  });
 
-  return JSON.parse(response.choices[0].message.content);
-}
-
-/* ------------------------------------------------------- */
-/* STEP 2 — RISK SCORING ENGINE                            */
-/* Calculate escalation + severity + summary               */
-/* ------------------------------------------------------- */
-
-async function scoreHarassmentRisk(detectionResult, language = "en") {
-
-  const OUTPUT_LANGUAGE = language === "fr" ? "French" : "English";
-
- const response = await openai.chat.completions.create({
-  model: "gpt-4o-mini",
-  temperature: 0,
-    response_format: { type: "json_object" },
-  messages: [
-    {
-      role: "system",
-      content: RISK_SCORING_SYSTEM_PROMPT
-    },
-    {
-      role: "user",
-   content: `
-OUTPUT_LANGUAGE: ${OUTPUT_LANGUAGE}
-
-------------------------------------------------
-INPUT DATA
-------------------------------------------------
-
-${JSON.stringify(detectionResult, null, 2)}
-`
-}
-  ]
-});
   const content = response.choices[0].message.content;
 
   return extractJson(content);
-}
-
-/* ------------------------------------------------------- */
-/* MAIN PIPELINE                                           */
-/* ------------------------------------------------------- */
-
-export async function analyzeHarassment(segments, language = "en") {
-
-  /* STEP 1: detection */
-
-  const detection = await detectHarassmentSignals(segments);
-
-  /* STEP 2: risk scoring */
-
-  const finalAnalysis = await scoreHarassmentRisk(detection, language);
-
-  return finalAnalysis;
 }
