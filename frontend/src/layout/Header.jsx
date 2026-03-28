@@ -50,19 +50,20 @@ const Header = () => {
               {t("contactUs")}
             </button>
             {/* Watch Demo Button with Red YouTube Play Icon */}
-            {/* <button 
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-md hover:shadow-lg whitespace-nowrap"
-            onClick={() => {
-              console.log('Watch demo clicked');
-            }}
-          >
-            <div className="w-4 h-4 bg-red-600 rounded-full flex items-center justify-center shrink-0">
-              <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </div>
-           {t("watchDemo")}
-          </button> */}
+       <a
+  href="https://www.youtube.com/watch?si=5Hk6bHDei2LIpZV1&v=7uWh2GASGMg&feature=youtu.be"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-md hover:shadow-lg whitespace-nowrap"
+>
+  <div className="w-4 h-4 bg-red-600 rounded-full flex items-center justify-center shrink-0">
+    <svg viewBox="0 0 24 24" fill="white" className="w-2.5 h-2.5">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  </div>
+
+  {t("watchDemo")}
+</a>
 
             {/* Language Toggle Switch */}
             <button
