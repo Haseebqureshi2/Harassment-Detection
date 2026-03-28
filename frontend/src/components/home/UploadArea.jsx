@@ -122,15 +122,14 @@ return (
       <div className="w-full max-w-3xl mx-auto bg-white border rounded-xl p-6 shadow-sm">
         
         <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-green-50">
               <Music className="w-5 h-5 text-green-600" />
             </div>
-
-            <div>
-              <p className="text-sm font-medium text-gray-800 truncate max-w-xs">
-                {file.name}
-              </p>
+<div className="min-w-0 flex-1">
+  <p className="text-sm font-medium text-gray-800 truncate">
+    {file.name}
+  </p>
               <p className="text-xs text-gray-400">
                 {(file.size / (1024 * 1024)).toFixed(2)} MB
               </p>

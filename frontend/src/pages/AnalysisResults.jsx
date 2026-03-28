@@ -51,7 +51,7 @@ const handleExportJSON = () => {
   URL.revokeObjectURL(url);
 };
   return (
-    <div  className="p-10 space-y-6 bg-gray-100 min-h-screen">
+   <div className="px-4 py-6 md:p-10 space-y-6 bg-gray-100 min-h-screen">
       {/* ===== Header Section ===== */}
       <div className="bg-gray-100 px-6 py-5 ">
         <div className="flex items-center gap-3">
@@ -73,9 +73,11 @@ const handleExportJSON = () => {
         </div>
       </div>
   {/* ===== Report Section (PDF ONLY) ===== */}
-<div id="analysis-report" className="grid grid-cols-12 gap-6">
-
-  <div className="col-span-4 space-y-4">
+<div
+  id="analysis-report"
+  className="grid grid-cols-1 lg:grid-cols-12 gap-6"
+>
+<div className="lg:col-span-4 space-y-4">
     <RiskScoreCard
       data={{
         riskScore: data.risk_score,
@@ -97,8 +99,7 @@ const handleExportJSON = () => {
       message={data.pattern_description}
     />
   </div>
-
-  <div className="col-span-8 space-y-4">
+<div className="lg:col-span-8 space-y-4">
  <FindingsList
   findings={data.findings}
   forceOpenForPdf={isGeneratingPdf}
@@ -120,14 +121,14 @@ const handleExportJSON = () => {
 </div>
 
 {/* ===== Buttons Section (NOT IN PDF) ===== */}
-<div className="flex items-center justify-end gap-12 pt-6 mr-6">
+<div className="flex flex-col md:flex-row md:justify-end gap-4 pt-6 md:mr-6">
   
   <button
   onClick={() => {
     setFeedbackMode("feedback");
     setIsFeedbackOpen(true);
   }}
-    className="flex items-center gap-3 px-6 h-14 rounded-xl bg-white hover:bg-gray-100 transition border border-gray-200 shadow-sm"
+    className="flex w-full md:w-auto items-center gap-3 px-6 h-14 rounded-xl bg-white hover:bg-gray-100 transition border border-gray-200 shadow-sm"
   >
     <div className="w-9 h-9 rounded-lg bg-gray-200 flex items-center justify-center">
       <MessageSquare className="w-5 h-5 text-gray-600" />
@@ -147,7 +148,7 @@ const handleExportJSON = () => {
     setFeedbackMode("pdf");
     setIsFeedbackOpen(true);
   }}
-  className="px-8 h-12 rounded-xl text-white font-semibold shadow-md transition 
+  className="w-full md:w-auto px-8 h-12 rounded-xl text-white font-semibold shadow-md transition 
     bg-linear-to-r from-teal-400 to-teal-600 
     hover:from-teal-500 hover:to-teal-700"
 >
@@ -158,7 +159,7 @@ const handleExportJSON = () => {
     setFeedbackMode("json");
     setIsFeedbackOpen(true);
   }}
-    className="px-8 h-12 rounded-xl bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition"
+    className="w-full md:w-auto px-8 h-12 rounded-xl bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition"
   >
    {t("exportJson")}
   </button>
