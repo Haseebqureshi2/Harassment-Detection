@@ -8,7 +8,7 @@ const Header = () => {
 
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language;
-
+const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   const toggleLanguage = () => {
@@ -38,9 +38,29 @@ const Header = () => {
               <span style={{ color: "rgb(63, 177, 181)" }}>AI</span>
             </span>
           </Link>
-
+{/* Mobile Menu Button */}
+<button
+  className="md:hidden ml-auto p-2"
+  onClick={() => setIsMenuOpen(!isMenuOpen)}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-6 w-6 text-gray-800"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    {isMenuOpen ? (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M6 18L18 6M6 6l12 12" />
+    ) : (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M4 6h16M4 12h16M4 18h16" />
+    )}
+  </svg>
+</button>
           {/* Right Section */}
-          <div className="flex items-center gap-6 ml-auto">
+         <div className="hidden md:flex items-center gap-6 ml-auto">
 
             {/* Contact Us Link */}
             <button
@@ -92,6 +112,66 @@ const Header = () => {
             </button>
           </div>
         </div>
+        {/* Mobile Menu */}
+{isMenuOpen && (
+ <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 shadow-md">
+  <div className="flex flex-col items-start gap-4">
+
+    {/* Contact */}
+    <button
+      onClick={() => {
+        setIsContactOpen(true);
+        setIsMenuOpen(false);
+      }}
+      className="text-gray-700 text-sm font-medium hover:text-gray-900 transition-colors"
+    >
+      {t("contactUs")}
+    </button>
+
+    {/* Watch Demo */}
+ <a
+  href="https://www.youtube.com/watch?si=5Hk6bHDei2LIpZV1&v=7uWh2GASGMg&feature=youtu.be"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700 transition-all shadow-md whitespace-nowrap"
+>
+  <div className="w-4 h-4 bg-red-600 rounded-full flex items-center justify-center shrink-0">
+    <svg viewBox="0 0 24 24" fill="white" className="w-2.5 h-2.5">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  </div>
+
+  {t("watchDemo")}
+</a>
+
+    {/* Language Toggle */}
+        <button
+              onClick={toggleLanguage}
+              className={`flex items-center h-10 rounded-full px-1 transition-colors duration-300 ${currentLang === 'EN'
+                  ? 'bg-gray-300'
+                  : 'bg-gray-300'
+                }`}
+              aria-label="Toggle language"
+            >
+              {/* EN Button */}
+              <div className={`w-9 h-8 flex items-center justify-center rounded-full font-semibold text-sm transition-all duration-300 ${currentLang === 'EN'
+                  ? 'bg-white text-gray-900 shadow-md'
+                  : 'text-gray-600'
+                }`}>
+                EN
+              </div>
+
+              {/* FR Button */}
+              <div className={`w-9 h-8 flex items-center justify-center rounded-full font-semibold text-sm transition-all duration-300 ${currentLang === 'FR'
+                  ? 'bg-white text-gray-900 shadow-md'
+                  : 'text-gray-600'
+                }`}>
+                FR
+              </div>
+            </button>
+</div>
+</div>
+)}
       </header>
       <ContactModal
         isOpen={isContactOpen}
